@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>프로젝트 상세</title></head>
+<body>
+<div th:replace="fragment/header :: *"></div>
+<h2 th:text="${project.title}"></h2>
+<p><strong>카테고리:</strong> <span th:text="${project.category}"></span></p>
+<p><strong>설명:</strong> <span th:text="${project.description}"></span></p>
+<p><strong>상태:</strong> <span th:text="${project.status}"></span></p>
+</body>
+</html>
