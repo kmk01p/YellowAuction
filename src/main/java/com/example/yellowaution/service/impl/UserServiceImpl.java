@@ -15,15 +15,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void register(String username, String password, String role) {
+    public void register(String username, String password, String userType) {
         userRepository.findByUsername(username).ifPresent(u -> {
             throw new IllegalArgumentException("이미 존재하는 사용자입니다.");
         });
 
         User user = new User();
         user.setUsername(username);
-        user.setPassword(password);  // 평문 저장
-        user.setRole(role);
+        user.setPassword(password);
+        user.setRole("USER");
+        user.setUserType(userType);
         userRepository.save(user);
     }
 
@@ -32,11 +33,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 올바르지 않습니다."));
 
-        // 평문 비교
         if (!user.getPassword().equals(password)) {
             throw new IllegalArgumentException("아이디 또는 비밀번호가 올바르지 않습니다.");
         }
-
         return user;
     }
 }

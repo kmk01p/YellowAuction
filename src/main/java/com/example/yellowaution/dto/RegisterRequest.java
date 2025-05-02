@@ -7,6 +7,8 @@ import lombok.Setter;
 public class RegisterRequest {
     private String username;
     private String password;
-    private String role; // USER, ADMIN
+//    private String role; // USER, ADMIN
+    private String userType;  // "EMPLOYER" or "FREELANCER"
+
 
 }

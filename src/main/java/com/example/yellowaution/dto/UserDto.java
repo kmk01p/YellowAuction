@@ -10,10 +10,13 @@ public class UserDto {
     private Long id;
     private String username;
     private String role;
+    private String userType;  // "EMPLOYER" or "FREELANCER"
 
-    public UserDto(Long id, String username, String role) {
+    public UserDto(Long id, String username, String role, String userType) {
         this.id = id;
         this.username = username;
         this.role = role;
+        this.userType = userType;
+
     }
 }

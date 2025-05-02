@@ -11,49 +11,50 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserService userService;
-
     public AuthController(UserService userService) {
         this.userService = userService;
     }
 
-    // 홈 페이지 ("/" 와 "/index" 둘 다 이 메서드로 처리)
-    @GetMapping({"/", "/index"})
-    public String home(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("loginUser");
-        model.addAttribute("loginUser", user);
-        return "index";  // src/main/resources/templates/index.html 을 렌더링
+    // 회원가입 폼
+    @GetMapping("/register")
+    public String registerForm() {
+        return "register";
     }
 
-    // 이하 기존 코드...
-    @GetMapping("/register")
-    public String registerForm() { return "register"; }
-
+    // 회원가입 처리
     @PostMapping("/register")
     public String register(@RequestParam String username,
                            @RequestParam String password,
-                           @RequestParam(defaultValue = "USER") String role) {
-        userService.register(username, password, role);
+                           @RequestParam String userType) {
+        userService.register(username, password, userType);
         return "redirect:/login";
     }
 
+    // 로그인 폼
     @GetMapping("/login")
     public String loginForm(@RequestParam(name="error", required=false) String error,
                             Model model) {
-        if (error != null) {
-            model.addAttribute("loginError", "아이디 또는 비밀번호가 올바르지 않습니다.");
-        }
+        if (error!=null) model.addAttribute("loginError","로그인 실패");
         return "login";
     }
 
+    // 로그인 처리 → 역할·유형별 대시보드로 리다이렉트
     @PostMapping("/login")
     public String login(@RequestParam String username,
                         @RequestParam String password,
                         HttpSession session) {
         User user = userService.login(username, password);
         session.setAttribute("loginUser", user);
-        return "redirect:/";
+        if ("ADMIN".equals(user.getRole())) {
+            return "redirect:/admin/dashboard";
+        } else if ("EMPLOYER".equals(user.getUserType())) {
+            return "redirect:/com/dashboard";
+        } else {
+            return "redirect:/free/dashboard";
+        }
     }
 
+    // 로그아웃
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();

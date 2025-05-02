@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthRestController {
 
     private final UserService userService;
-
     public AuthRestController(UserService userService) {
         this.userService = userService;
     }
@@ -20,11 +19,10 @@ public class AuthRestController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest req) {
         try {
-            userService.register(req.getUsername(), req.getPassword(), req.getRole());
+            userService.register(req.getUsername(), req.getPassword(), req.getUserType());
             return ResponseEntity.ok(new ApiResponse(true, "회원가입 성공"));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
+            return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new ApiResponse(false, e.getMessage()));
         }
     }
@@ -34,12 +32,14 @@ public class AuthRestController {
         try {
             User user = userService.login(req.getUsername(), req.getPassword());
             session.setAttribute("loginUser", user);
-            UserDto dto = new UserDto(user.getId(), user.getUsername(), user.getRole());
+            UserDto dto = new UserDto(
+                    user.getId(), user.getUsername(),
+                    user.getRole(), user.getUserType()
+            );
             return ResponseEntity.ok(dto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(new ApiResponse(false, "아이디 또는 비밀번호가 올바르지 않습니다."));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ApiResponse(false, "로그인 실패"));
         }
     }
 

@@ -1,40 +1,38 @@
 package com.example.yellowaution.interceptor;
 
 import com.example.yellowaution.domain.User;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
-
-    /**
-     * 1) 모든 요청에 대해 세션(loginUser) 유무를 검사합니다.
-     * 2) URI가 /admin... 으로 시작하면, 세션이 있어도 role 검사까지 수행합니다.
-     */
     @Override
-    public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response,
+    public boolean preHandle(HttpServletRequest req,
+                             HttpServletResponse res,
                              Object handler) throws Exception {
-
-        HttpSession session = request.getSession(false);
-        // 1) 로그인 여부 검사
-        if (session == null || session.getAttribute("loginUser") == null) {
-            response.sendRedirect("/login");
+        HttpSession session = req.getSession(false);
+        if (session==null || session.getAttribute("loginUser")==null) {
+            res.sendRedirect("/login");
             return false;
         }
+        User u = (User)session.getAttribute("loginUser");
+        String uri = req.getRequestURI();
 
-        // 2) ADMIN 전용 경로 권한 검사
-        User user = (User) session.getAttribute("loginUser");
-        String uri = request.getRequestURI();
-        if (uri.startsWith("/admin") && !"ADMIN".equals(user.getRole())) {
-            response.sendRedirect("/access-denied");
+        // ADMIN은 모든 페이지 접근 허용
+        if ("ADMIN".equals(u.getRole())) {
+            return true;
+        }
+        // 구인(EMPLOYER) 전용
+        if (uri.startsWith("/com") && !"EMPLOYER".equals(u.getUserType())) {
+            res.sendRedirect("/access-denied");
             return false;
         }
-
-        // 그 외 요청은 모두 허용
+        // 구직(FREELANCER) 전용
+        if (uri.startsWith("/free") && !"FREELANCER".equals(u.getUserType())) {
+            res.sendRedirect("/access-denied");
+            return false;
+        }
         return true;
     }
 }
