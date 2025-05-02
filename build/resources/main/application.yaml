@@ -10,9 +10,9 @@ logging:
 spring:
   #
   datasource:
-    url: jdbc:mysql://localhost:3306/YellowAution?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-    username: root
-    password: minkyoung11!
+    url: jdbc:mysql://db.forhim.kr:3306/dbwilliam7872ksh?characterEncoding=UTF-8&serverTimezone=Asia/Seoul&useSSL=false
+    username: william7872ksh
+    password: bnn3570jhk7872!
     driver-class-name: com.mysql.cj.jdbc.Driver
   #
   jpa:

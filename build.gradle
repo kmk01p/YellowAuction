@@ -35,7 +35,6 @@ dependencies {
 
     //mybatis 사용
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3' //3.0.2 => 3.0.3으로 상승!!
-    /*
 
     // aws 파일 업로드를 위함
     // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk
@@ -43,20 +42,18 @@ dependencies {
     // https://mvnrepository.com/artifact/commons-io/commons-io
     implementation group: 'commons-io', name: 'commons-io', version: '2.13.0'
 
+    //implementation files("libs/INIpaySample_v1.3.jar")
+    /*
+    */
+    implementation fileTree(dir:'libs', includes: ['*.jar'])
+
+    /*
     //swagger 사용!!!
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2' //swagger 사용을 위함.
 
     // 이메일 전송을 위함
     // https://mvnrepository.com/artifact/com.sun.mail/javax.mail
     implementation group: 'com.sun.mail', name: 'javax.mail', version: '1.6.2'
-
-    // 시큐리티 사용을 위함
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
-    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
-    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
-    //implementation 'com.auth0:java-jwt:4.4.0'
-    implementation group: 'com.auth0', name: 'java-jwt', version: '4.4.0'
 
     // SNS 로그인을 위함
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -67,10 +64,21 @@ dependencies {
 
     // 구글 파이어베이스
     implementation 'com.google.firebase:firebase-admin:9.2.0'           // Google Firebase Admin
-*/
+    */
 
     /*
     */
+    // 시큐리티 사용을 위함
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+    //implementation 'com.auth0:java-jwt:4.4.0'
+    implementation group: 'com.auth0', name: 'java-jwt', version: '4.4.0'
+
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mobile
+    implementation("org.springframework.boot:spring-boot-starter-mobile:1.5.22.RELEASE")
+
+
     // 추가 종료
 
     compileOnly 'org.projectlombok:lombok'
@@ -82,6 +90,9 @@ dependencies {
 
     annotationProcessor "jakarta.annotation:jakarta.annotation-api" // java.lang.NoClassDefFoundError (javax.annotation.Generated) 관련 대응 코드
     annotationProcessor "jakarta.persistence:jakarta.persistence-api" // java.lang.NoClassDefFoundError (javax.annotation.Entity) 관련 대응 코드
+
+    // WebFlux 의존성 추가
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'  // 추가된 부분
 
 }
 
