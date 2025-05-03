@@ -10,7 +10,12 @@ import java.time.LocalDate;
 public class ProfileDto {
     private Long id;
 
-    private String companyName;
+    // 공통
+    private String name;
+    private String phone;
+    private String email;
+
+    // 기업 전용
     private String representative;
     private String companySize;
     private LocalDate establishedDate;
@@ -20,8 +25,12 @@ public class ProfileDto {
     private Long capital;
     private Long annualRevenue;
     private String homepageUrl;
-    private String phone;
-    private String email;
 
-    private Long userId;  // ✅ 소유자 식별을 위한 필드
+    // 프리랜서 전용
+    private String jobType;
+    private String career;
+    private String techStack;
+
+    //소유자 식별을 위한 필드
+    private Long userId;
 }

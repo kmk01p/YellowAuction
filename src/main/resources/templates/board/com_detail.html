@@ -1,0 +1,95 @@
+<!-- src/main/resources/static/board/com_detail.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>프로젝트 상세(기업)</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h2>프로젝트 상세 (기업용)</h2>
+<input type="hidden" id="projId">
+
+<div>
+    <label>프로젝트명:</label><br>
+    <input type="text" id="title"><br>
+    <label>Due Day:</label><br>
+    <input type="date" id="dueDate"><br>
+    <label>내용:</label><br>
+    <textarea id="description"></textarea><br>
+    <label>사용 기술:</label><br>
+    <input type="text" id="technologies"><br>
+    <label>구인 기간:</label><br>
+    <input type="number" id="recruitPeriod"><br>
+    <label>초기 경매 금액:</label><br>
+    <input type="number" id="startPrice"><br>
+    <label>구인 상태:</label><br>
+    <select id="status">
+        <option value="구인중">구인중</option>
+        <option value="마감">마감</option>
+    </select><br><br>
+
+    <button id="saveBtn">수정 저장</button>
+    <button id="closeBtn">조기 마감</button>
+    <button onclick="history.back()">목록</button>
+</div>
+
+<script>
+    const segments = window.location.pathname.split('/');
+    const id = segments[segments.length - 1];
+
+    $('#projId').val(id);
+
+    function loadDetail(){
+        $.getJSON(`/api/board/${id}`, res=>{
+            const p = res.data;
+            $('#title').val(p.title);
+            $('#dueDate').val(p.dueDate);
+            $('#description').val(p.description);
+            $('#technologies').val(p.technologies.join(','));
+            $('#recruitPeriod').val(p.recruitPeriod);
+            $('#startPrice').val(p.startPrice);
+            $('#status').val(p.status);
+        });
+    }
+
+    $('#saveBtn').click(()=>{
+        const dto = {
+            title: $('#title').val(),
+            dueDate: $('#dueDate').val(),
+            description: $('#description').val(),
+            technologies: $('#technologies').val().split(','),
+            recruitPeriod: parseInt($('#recruitPeriod').val(),10),
+            startPrice: parseInt($('#startPrice').val(),10),
+            status: $('#status').val()
+        };
+        $.ajax({
+            url: `/api/board/${id}`,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(dto),
+            success: ()=> {
+                alert('수정 완료');
+                location.href = '/board/list';
+            },
+            error: xhr=> alert('수정 실패: '+xhr.responseText)
+        });
+    });
+
+    $('#closeBtn').click(()=>{
+        $.ajax({
+            url: `/api/board/${id}/close`,
+            method: 'PUT',
+            success: ()=> {
+                $('#status').val('마감');
+                alert('조기 마감되었습니다');
+                location.href = '/board/list';
+                },
+            error: xhr=> alert('조기 마감 실패: '+xhr.responseText)
+        });
+    });
+
+    $(document).ready(loadDetail);
+</script>
+</body>
+</html>

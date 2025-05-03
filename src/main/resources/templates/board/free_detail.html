@@ -1,0 +1,81 @@
+<!-- src/main/resources/static/board/free_detail.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>프로젝트 경매(프리랜서)</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h2>프로젝트 경매</h2>
+<input type="hidden" id="projId">
+
+<div>
+    <p>프로젝트명: <span id="title"></span></p>
+    <p>현재 입찰가: ₩<span id="currentPrice"></span></p>
+
+    <label>입찰 금액 (단위: 만원):</label><br>
+    <input type="text" id="bidStep" placeholder="숫자만 입력하세요"> <span>만원</span><br><br>
+
+    <button id="bidBtn">입찰하기</button>
+    <button onclick="history.back()">목록</button>
+</div>
+
+<script>
+    // URL path에서 id 추출
+    const segments = window.location.pathname.split('/');
+    const id = segments[segments.length - 1];
+    // const params = new URLSearchParams(location.search);
+    // const id = params. get('id');
+
+    $('#projId').val(id);
+
+    // 프로젝트 정보 불러오기
+    function loadDetail(){
+        $.getJSON(`/api/board/${id}`, res => {
+            const p = res.data;
+            $('#title').text(p.title);
+            $('#currentPrice').text(p.currentPrice.toLocaleString());
+        });
+    }
+
+    $('#bidBtn').click(() => {
+        const key = `bid_done_${id}`;
+
+        // 연속 입찰 방지
+        // if (localStorage.getItem(key) === 'true') {
+        //     return alert('연속 입찰은 불가능합니다.');
+        // }
+
+        // 입력값에서 숫자만 추출
+        const raw = $('#bidStep').val() || '';
+        const numeric = raw.replace(/\D/g, '');
+        const step = parseInt(numeric, 10) || 0;
+
+        if (step < 1) {
+            return alert('최소 1 이상의 숫자를 입력하세요.');
+        }
+
+        // '만원' 단위 금액 계산
+        const amount = step * 10000;
+
+        $.ajax({
+            url: `/api/board/${id}/bid`,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ amount }),
+            success: () => {
+                localStorage.setItem(key, 'true');
+                alert(`입찰 성공! ${step}만원을 경매했습니다.`);
+                loadDetail();
+            },
+            error: xhr => {
+                alert('입찰 실패: ' + xhr.responseText);
+            }
+        });
+    });
+
+    $(document).ready(loadDetail);
+</script>
+</body>
+</html>

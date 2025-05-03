@@ -1,19 +1,40 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <title>홈</title>
     <meta charset="UTF-8">
 </head>
 <body>
 <h2>프리랜서</h2>
+
+<!-- 기존 로그인 상태 메시지 -->
 <p th:if="${session.loginUser != null}">
     환영합니다, <span th:text="${session.loginUser.username}"></span>님!
-    (권한: <span th:text="${session.loginUser.role}"></span>)
-    <br>
-    <a th:href="@{/logout}">로그아웃</a>
+    (권한: <span th:text="${session.loginUser.role}"></span>)<br>
+    <a onclick="location.href='/logout'">로그아웃</a>
 </p>
 <p th:if="${session.loginUser == null}">
-    <a th:href="@{/login}">로그인</a> 또는 <a th:href="@{/register}">회원가입</a>해주세요.
+    <a onclick="location.href='/login'">로그인</a> 또는
+    <a onclick="location.href='/register'">회원가입</a>해주세요.
 </p>
+
+<!-- 여기서부터 네비게이션 추가 -->
+<nav th:if="${session.loginUser != null}" style="margin-top:20px;">
+    <ul style="list-style:none; padding:0;">
+        <li style="display:inline; margin-right:10px;">
+            <a onclick="location.href='/profile/free_list.html'">개인 프로필 목록</a>
+        </li>
+        <li style="display:inline; margin-right:10px;">
+            <a onclick="location.href='/profile/free_create.html'">개인 프로필 등록</a>
+        </li>
+    </ul>
+</nav>
+<nav th:if="${session.loginUser != null}" style="margin-top:20px;">
+    <ul style="list-style:none; padding:0;">
+        <li style="display:inline; margin-right:10px;">
+            <a onclick="location.href='/board/list.html'">프로젝트 목록</a>
+        </li>
+    </ul>
+</nav>
 </body>
 </html>

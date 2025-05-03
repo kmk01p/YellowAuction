@@ -23,7 +23,12 @@ public class ProfileServiceImpl implements ProfileService {
     private ProfileDto toDto(Profile e) {
         ProfileDto d = new ProfileDto();
         d.setId(e.getId());
-        d.setCompanyName(e.getCompanyName());
+        // 공통
+        d.setName(e.getName());
+        d.setPhone(e.getPhone());
+        d.setEmail(e.getEmail());
+
+        // 기업 전용
         d.setRepresentative(e.getRepresentative());
         d.setCompanySize(e.getCompanySize());
         d.setEstablishedDate(e.getEstablishedDate());
@@ -33,15 +38,25 @@ public class ProfileServiceImpl implements ProfileService {
         d.setCapital(e.getCapital());
         d.setAnnualRevenue(e.getAnnualRevenue());
         d.setHomepageUrl(e.getHomepageUrl());
-        d.setPhone(e.getPhone());
-        d.setEmail(e.getEmail());
+
+        // **프리랜서 전용 필드 추가**
+        d.setJobType(e.getJobType());
+        d.setCareer(e.getCareer());
+        d.setTechStack(e.getTechStack());
+
         d.setUserId(e.getUser().getId());
         return d;
+
     }
 
     private Profile toEntity(ProfileDto d, User user) {
         Profile e = new Profile();
-        e.setCompanyName(d.getCompanyName());
+        // 공통
+        e.setName(d.getName());
+        e.setPhone(d.getPhone());
+        e.setEmail(d.getEmail());
+
+        // 기업 전용 (nullable=true)
         e.setRepresentative(d.getRepresentative());
         e.setCompanySize(d.getCompanySize());
         e.setEstablishedDate(d.getEstablishedDate());
@@ -51,10 +66,15 @@ public class ProfileServiceImpl implements ProfileService {
         e.setCapital(d.getCapital());
         e.setAnnualRevenue(d.getAnnualRevenue());
         e.setHomepageUrl(d.getHomepageUrl());
-        e.setPhone(d.getPhone());
-        e.setEmail(d.getEmail());
+
+        // **프리랜서 전용 필드 매핑 추가**
+        e.setJobType(d.getJobType());
+        e.setCareer(d.getCareer());
+        e.setTechStack(d.getTechStack());
+
         e.setUser(user);
         return e;
+
     }
 
     @Override
@@ -70,12 +90,16 @@ public class ProfileServiceImpl implements ProfileService {
     public ProfileDto update(Long id, ProfileDto dto, UserPrincipal principal) {
         Profile e = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("프로필이 없습니다. id=" + id));
-
         if (!e.getUser().getId().equals(principal.getUser().getId())) {
             throw new AccessDeniedException("접근 권한 없음");
         }
 
-        e.setCompanyName(dto.getCompanyName());
+        // 공통 업데이트
+        e.setName(dto.getName());
+        e.setPhone(dto.getPhone());
+        e.setEmail(dto.getEmail());
+
+        // 기업 전용
         e.setRepresentative(dto.getRepresentative());
         e.setCompanySize(dto.getCompanySize());
         e.setEstablishedDate(dto.getEstablishedDate());
@@ -85,8 +109,11 @@ public class ProfileServiceImpl implements ProfileService {
         e.setCapital(dto.getCapital());
         e.setAnnualRevenue(dto.getAnnualRevenue());
         e.setHomepageUrl(dto.getHomepageUrl());
-        e.setPhone(dto.getPhone());
-        e.setEmail(dto.getEmail());
+
+        // **프리랜서 전용 업데이트 추가**
+        e.setJobType(dto.getJobType());
+        e.setCareer(dto.getCareer());
+        e.setTechStack(dto.getTechStack());
 
         return toDto(repository.save(e));
     }

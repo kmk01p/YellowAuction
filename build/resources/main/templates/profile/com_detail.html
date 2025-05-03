@@ -11,8 +11,8 @@
 
 <input type="hidden" id="profileId">
 
-<label>회사명:</label><br>
-<input type="text" id="companyName"><br>
+<label>이름:</label><br>
+<input type="text" id="name"><br>
 
 <label>대표자명:</label><br>
 <input type="text" id="representative"><br>
@@ -59,7 +59,7 @@
     // 기존 데이터 로드
     $.getJSON(`/api/profile/${id}`, function(res){
         const p = res.data;
-        $('#companyName').val(p.companyName);
+        $('#name').val(p.name);
         $('#representative').val(p.representative);
         $('#companySize').val(p.companySize);
         $('#establishedDate').val(p.establishedDate);
@@ -76,7 +76,7 @@
     // 업데이트 처리
     $('#updateBtn').on('click', function(){
         const dto = {
-            companyName: $('#companyName').val(),
+            name: $('#name').val(),
             representative: $('#representative').val(),
             companySize: $('#companySize').val(),
             establishedDate: $('#establishedDate').val(),

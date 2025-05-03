@@ -1,0 +1,178 @@
+<!-- src/main/resources/static/board/create.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>프로젝트 등록</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* 기술 스택 옵션 스타일 */
+        #techOptions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .tech-option {
+            position: relative;
+            padding: 6px 12px 6px 20px;
+            border: 1px solid #ccc;
+            border-radius: 16px;
+            color: #555;
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .tech-option::before {
+            content: '+';
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-weight: bold;
+        }
+        .tech-option.selected {
+            border-color: #4f79ff;
+            background-color: rgba(79,121,255,0.1);
+            color: #4f79ff;
+        }
+        .tech-option.selected::before {
+            content: '✔';
+            color: #4f79ff;
+        }
+        .field-group {
+            margin-bottom: 12px;
+        }
+        label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 300px;
+            padding: 6px;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
+        button {
+            padding: 6px 12px;
+            font-size: 14px;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h2>프로젝트 등록</h2>
+
+<div class="field-group">
+    <label>프로젝트명:</label>
+    <input type="text" id="title">
+</div>
+
+<div class="field-group">
+    <label>Due Day:</label>
+    <input type="date" id="dueDate">
+</div>
+
+<div class="field-group">
+    <label>프로젝트 내용:</label>
+    <textarea id="description"></textarea>
+</div>
+
+<div class="field-group">
+    <label>사용 기술 (클릭하여 선택/해제):</label>
+    <div id="techOptions">
+        <span class="tech-option">Java</span>
+        <span class="tech-option">Javascript</span>
+        <span class="tech-option">MySQL</span>
+        <span class="tech-option">PHP</span>
+        <span class="tech-option">계획성</span>
+        <span class="tech-option">Jquery</span>
+        <span class="tech-option">React</span>
+        <span class="tech-option">Git</span>
+        <span class="tech-option">HTML</span>
+        <span class="tech-option">고객응대</span>
+        <span class="tech-option">CSS</span>
+        <span class="tech-option">RDBMS</span>
+        <span class="tech-option">MyBatis</span>
+        <span class="tech-option">SQL</span>
+        <span class="tech-option">공감능력</span>
+        <span class="tech-option">JPA</span>
+        <span class="tech-option">전자정보표준프레임워크</span>
+        <span class="tech-option">MariaDB</span>
+        <span class="tech-option">TypeScript</span>
+        <span class="tech-option">고객지향성</span>
+    </div>
+</div>
+
+<div class="field-group">
+    <label>구인 기간(일):</label>
+    <input type="number" id="recruitPeriod">
+</div>
+
+<div class="field-group">
+    <label>초기 경매 금액(₩):</label>
+    <input type="number" id="startPrice">
+</div>
+
+<div class="field-group">
+    <label>구인 상태:</label>
+    <select id="status">
+        <option value="구인중" selected>구인중</option>
+        <option value="마감">마감</option>
+    </select>
+</div>
+
+<button id="saveBtn">저장</button>
+<button onclick="history.back()">취소</button>
+
+<script>
+    $(document).ready(function(){
+        // 기술 옵션 클릭 시 토글
+        $('#techOptions').on('click', '.tech-option', function(){
+            $(this).toggleClass('selected');
+        });
+
+        $('#saveBtn').click(function(){
+            // 선택된 기술만 배열로 추출
+            const techs = $('#techOptions .tech-option.selected')
+                .map((_, el) => $(el).text().trim())
+                .get();
+
+            const dto = {
+                title: $('#title').val(),
+                dueDate: $('#dueDate').val(),
+                description: $('#description').val(),
+                technologies: techs,
+                recruitPeriod: parseInt($('#recruitPeriod').val(), 10),
+                startPrice: parseInt($('#startPrice').val(), 10),
+                status: $('#status').val()
+            };
+
+            $.ajax({
+                url: '/api/board',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(dto),
+                success: function(){
+                    location.href = '/board/list.html';
+                },
+                error: function(xhr){
+                    alert('등록 실패: ' + xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

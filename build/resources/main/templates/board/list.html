@@ -1,0 +1,77 @@
+<!-- src/main/resources/static/board/list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>프로젝트 목록</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        th { cursor: pointer; }
+    </style>
+</head>
+<body>
+<h2>프로젝트 목록</h2>
+<button onclick="location.href='/board/create.html'">새 프로젝트 등록</button>
+<table border="1" id="projectTable" style="width:100%; margin-top:10px;">
+    <thead>
+    <tr>
+        <th>프로젝트명</th>
+        <th class="sortable" data-key="startPrice">초기 경매 금액</th>
+        <th class="sortable" data-key="technologies">사용 기술</th>
+        <th class="sortable" data-key="status">구인 상태</th>
+        <th>Due Day</th>
+        <th>구인 기간</th>
+        <th>작업</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    let projects = [], sortAsc = {};
+
+    function loadList(){
+        $.getJSON('/api/board', res => {
+            projects = res.data;
+            renderTable(projects);
+        });
+    }
+
+    function renderTable(list){
+        const tbody = $('#projectTable tbody').empty();
+        list.forEach(p=>{
+            $('<tr>')
+                .append(`<td><a href="/board/com_detail.html?id=${p.id}">${p.title}</a></td>`)
+                .append(`<td>${p.startPrice.toLocaleString()}</td>`)
+                .append(`<td>${p.technologies.join(', ')}</td>`)
+                .append(`<td>${p.status}</td>`)
+                .append(`<td>${p.dueDate}</td>`)
+                .append(`<td>${p.recruitPeriod}일</td>`)
+                .append(`
+                  <td>
+                    <button onclick="location.href='/board/com_detail/${p.id}'">수정</button>
+                    <button onclick="location.href='/board/free_detail/${p.id}'">입찰</button>
+                  </td>
+                `)
+                .appendTo(tbody);
+        });
+    }
+
+    // 컬럼 헤더 클릭 정렬
+    $('.sortable').click(function(){
+        const key = $(this).data('key');
+        sortAsc[key] = !sortAsc[key];
+        const sorted = projects.slice().sort((a,b)=>{
+            let va = a[key], vb = b[key];
+            // 기술은 문자열 길이로 정렬 (예시)
+            if(Array.isArray(va)) va = va.join(', ');
+            if(Array.isArray(vb)) vb = vb.join(', ');
+            return va>vb ? (sortAsc[key]?1:-1) : va<vb ? (sortAsc[key]?-1:1) : 0;
+        });
+        renderTable(sorted);
+    });
+
+    $(document).ready(loadList);
+</script>
+</body>
+</html>

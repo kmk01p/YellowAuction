@@ -27,14 +27,12 @@
         <li style="display:inline; margin-right:10px;">
             <a onclick="location.href='/profile/com_create.html'">회사 프로필 등록</a>
         </li>
-        <li style="display:inline;">
-            <!-- 수정 페이지는 id 파라미터를 직접 입력하도록 폼으로 처리 -->
-            <form method="get" style="display:inline;"
-                  onsubmit="location.href='/profile/com_detail.html?id=' + this.id.value; return false;">
-                <input type="number" name="id" placeholder="수정할 ID" required
-                       style="width:80px;"/>
-                <button type="submit">프로필 수정</button>
-            </form>
+    </ul>
+</nav>
+<nav th:if="${session.loginUser != null}" style="margin-top:20px;">
+    <ul style="list-style:none; padding:0;">
+        <li style="display:inline; margin-right:10px;">
+            <a onclick="location.href='/board/list.html'">프로젝트 목록</a>
         </li>
     </ul>
 </nav>

@@ -12,7 +12,7 @@
 <table border="1" id="profileTable" style="margin-top:10px; width:100%;">
     <thead>
     <tr>
-        <th>회사명</th>
+        <th>이름</th>
         <th>대표자명</th>
         <th>기업규모</th>
         <th>설립일</th>
@@ -37,7 +37,7 @@
             const tbody = $('#profileTable tbody').empty();
             res.data.forEach(p=>{
                 $('<tr>')
-                    .append(`<td>${p.companyName}</td>`)
+                    .append(`<td>${p.name}</td>`)
                     .append(`<td>${p.representative}</td>`)
                     .append(`<td>${p.companySize}</td>`)
                     .append(`<td>${p.establishedDate}</td>`)
