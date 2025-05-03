@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>홈</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h2>회사</h2>
+
+<!-- 기존 로그인 상태 메시지 -->
+<p th:if="${session.loginUser != null}">
+    환영합니다, <span th:text="${session.loginUser.username}"></span>님!
+    (권한: <span th:text="${session.loginUser.role}"></span>)<br>
+    <a onclick="location.href='/logout'">로그아웃</a>
+</p>
+<p th:if="${session.loginUser == null}">
+    <a onclick="location.href='/login'">로그인</a> 또는
+    <a onclick="location.href='/register'">회원가입</a>해주세요.
+</p>
+
+<!-- 여기서부터 네비게이션 추가 -->
+<nav th:if="${session.loginUser != null}" style="margin-top:20px;">
+    <ul style="list-style:none; padding:0;">
+        <li style="display:inline; margin-right:10px;">
+            <a onclick="location.href='/profile/com_list.html'">회사 프로필 목록</a>
+        </li>
+        <li style="display:inline; margin-right:10px;">
+            <a onclick="location.href='/profile/com_create.html'">회사 프로필 등록</a>
+        </li>
+        <li style="display:inline;">
+            <!-- 수정 페이지는 id 파라미터를 직접 입력하도록 폼으로 처리 -->
+            <form method="get" style="display:inline;"
+                  onsubmit="location.href='/profile/com_detail.html?id=' + this.id.value; return false;">
+                <input type="number" name="id" placeholder="수정할 ID" required
+                       style="width:80px;"/>
+                <button type="submit">프로필 수정</button>
+            </form>
+        </li>
+    </ul>
+</nav>
+</body>
+</html>

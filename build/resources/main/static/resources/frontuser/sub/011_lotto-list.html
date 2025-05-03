@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=no">
+<title>무인가드</title>
+<link rel="stylesheet" href="../css/reset.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/component.css">
+<link rel="stylesheet" href="../css/modal.css">
+<link rel="stylesheet" href="../css/page.css">
+<script src="../js/jquery-1.11.1.min.js"></script>
+<script src="../js/jquery.easing.1.3.js"></script>
+<script src="../js/script.js"></script>
+</head>
+<body>
+
+<!--로또 안내 모달창-->
+<div class="dim-layer js-modal">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-guide">
+						<div class="txt">
+							<p>출석시마다 포인트와 함께 <br>무인가드 로또를 1장씩 추가로 지급돼요.</p>
+							<p>1~45 사이의 숫자를 [수동], [자동] 발급하여 총 6자리의 숫자를 맞추면 <br>행운의 상품을 받으실 수 있어요.<span>(상품은 변경될 수 있음)</span></p>
+							<p>지급된 로또를 체크 후 <br>우측상단 [사용하기]를 눌러주세요.</p>
+							<p>한주의 로또는 다음주 월요일 오전 10시에 당첨번호가 발표되며, <br>당첨자에게는 팝업으로 알려드려요!</p>
+						</div>
+						
+						<div class="txt2">* 알람설정 미동의시 당첨알람이 가지 않고 알람 미설정으로 인한 당첨사실 누락 또는 본인확인 누락으로 인한 당첨사실 누락은 책임지지 않습니다.</div>
+					</div>
+					
+					<div class="btn-group-modal">
+						<button type="button" class="btn btn-custom js-modal-master-close">확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--당첨 축하 모달창-->
+<div class="dim-layer js-modal2">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-message">
+						<div class="tit">축하합니다!</div>
+						<div class="txt">00회차 무인가드 로또 <br>00등에 당첨되셨습니다!</div>
+						<div class="txt3">포인트 00P 지급 완료!</div>
+					</div>
+					
+					<div class="btn-group-modal">
+						<button type="button" class="btn btn-custom js-modal-master-close">당첨번호/당첨자 보러가기</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!--당첨 실패 모달창-->
+<div class="dim-layer js-modal3">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-message">
+						<div class="txt">아쉽게도 00회차 무인가드 로또에 <br>당첨되지 않았습니다. <br>다음 기회를 노려보세요!</div>
+					</div>
+					
+					<div class="btn-group-modal">
+						<button type="button" class="btn btn-custom js-modal-master-close">당첨번호/당첨자 보러가기</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div id="wrap">
+	<header class="header">
+		<div class="hd">
+			<div class="hd-tit">무인가드 로또</div>
+			<button type="button" class="hd-back" onclick="location.href='javascript:history.back(-1);'"></button>
+		</div>
+	</header>
+	
+	<div class="container">
+		<div class="flex-box lotto-list">
+			<div class="flex-content">
+				<div class="board-tool">
+					<div class="tit">로또 발급 목록</div>
+					<button type="button" class="btn js-modal-open">무인가드로또 안내</button>
+				</div>
+
+				<table class="tbl tbl-v2">
+					<thead>
+						<tr>
+							<th class="t1">수령일자</th>
+							<th class="t2">로또번호</th>
+							<th class="t3">회차</th>
+							<th class="t4">당첨여부</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr>
+							<td class="t1">23.06.29</td>
+							<td class="t2">
+								<div class="num">
+									<span>2</span>
+									<span class="active">15</span>
+									<span class="active">20</span>
+									<span>23</span>
+									<span>32</span>
+									<span>37</span>
+								</div>
+							</td>
+							<td class="t3">1회차</td>
+							<td class="t4"><span class="v1">미당첨</span></td>
+						</tr>
+
+						<tr>
+							<td class="t1">23.06.29</td>
+							<td class="t2">
+								<div class="num">
+									<span class="active">2</span>
+									<span class="active">15</span>
+									<span class="active">20</span>
+									<span class="active">23</span>
+									<span class="active">32</span>
+									<span class="active">37</span>
+								</div>
+							</td>
+							<td class="t3">1회차</td>
+							<td class="t4"><span class="v2">1등</span></td>
+						</tr>
+
+						<tr>
+							<td class="t1">23.06.29</td>
+							<td class="t2">
+								<div class="num">
+									<span>2</span>
+									<span>15</span>
+									<span>20</span>
+									<span>23</span>
+									<span>32</span>
+									<span class="active">37</span>
+								</div>
+							</td>
+							<td class="t3">1회차</td>
+							<td class="t4"><span class="v1">미당첨</span></td>
+						</tr>
+
+						<tr>
+							<td class="t1">23.06.29</td>
+							<td class="t2">
+								<div class="num">
+									<span>2</span>
+									<span class="active">15</span>
+									<span>20</span>
+									<span>23</span>
+									<span class="active">32</span>
+									<span>37</span>
+								</div>
+							</td>
+							<td class="t3">1회차</td>
+							<td class="t4"><span class="v2">1등</span></td>
+						</tr>
+
+						<tr>
+							<td class="t1">23.06.29</td>
+							<td class="t2">
+								<div class="num">
+									<span>2</span>
+									<span>15</span>
+									<span>20</span>
+									<span class="active">23</span>
+									<span class="active">32</span>
+									<span>37</span>
+								</div>
+							</td>
+							<td class="t3">1회차</td>
+							<td class="t4"><span class="v1">미당첨</span></td>
+						</tr>
+
+						<tr>
+							<td class="t1">23.06.29</td>
+							<td class="t2">
+								<div class="num">
+									<span class="active">2</span>
+									<span>15</span>
+									<span>20</span>
+									<span>23</span>
+									<span>32</span>
+									<span>37</span>
+								</div>
+							</td>
+							<td class="t3">1회차</td>
+							<td class="t4"><span class="v2">1등</span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="flex-bottom">
+				<button type="button" class="btn-custom">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

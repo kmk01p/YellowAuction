@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=no">
+<title>무인가드</title>
+<link rel="stylesheet" href="../css/reset.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/component.css">
+<link rel="stylesheet" href="../css/modal.css">
+<link rel="stylesheet" href="../css/page.css">
+<script src="../js/jquery-1.11.1.min.js"></script>
+<script src="../js/jquery.easing.1.3.js"></script>
+<script src="../js/script.js"></script>
+</head>
+<body>
+
+<div id="wrap">
+	<header class="header">
+		<div class="hd">
+			<div class="hd-tit">게임하기</div>
+			<button type="button" class="hd-back" onclick="location.href='javascript:history.back(-1);'"></button>
+		</div>
+	</header>
+	
+	<div class="container">
+		<div class="game-list">
+			<div class="search-group">
+				<table style="width: 100%">
+					<tr>
+						<td>
+							<select class="select-custom">
+								<option>12</option>
+							</select>
+						</td>
+						<td>
+							<div class="inp-group-search">
+								<input type="text" placeholder="검색어를 입력하세요." class="inp-search" />
+								<button type="button" class="btn-search" onclick=""></button>
+							</div>
+						</td>
+					</tr>
+				</table>
+				<!--
+				<div class="inp-group-search">
+					<input type="text" placeholder="검색어를 입력하세요." class="inp-search">
+					<button type="button" class="btn-search" onclick="location.href='adm-member-result2.html'"></button>
+				</div>
+				-->
+			</div>
+			<ol class="list-menu">
+				<li>
+					<a href="005_rock-paper-scissors.html" class="card">
+						<div class="tit-group">
+							<div class="tit">가위바위보 대결!</div>
+							<div class="txt">다른 유저와 대결을 통해 포인트를 늘려보세요!</div>
+							<div class="txt">1</div>
+						</div>
+						
+						<!--<div class="img-group">
+							<img src="../img/img_menu1_game.svg" alt=" " class="img">
+						</div>-->
+					</a>
+				</li>
+				
+				<li>
+					<a href="005_roulette.html" class="card">
+						<div class="tit-group">
+							<div class="tit">룰렛돌리기</div>
+							<div class="txt">나의 포인트를 걸고 행운을 시험해보세요!</div>
+						</div>
+						
+						<div class="img-group">
+							<img src="../img/img_menu2_game.svg" alt=" " class="img">
+						</div>
+					</a>
+				</li>
+				
+				<li>
+					<a href="005_lottery.html" class="card">
+						<div class="tit-group">
+							<div class="tit">행운의 뽑기</div>
+							<div class="txt">추억의 뽑기 게임을 통해 포인트를 모아보세요!</div>
+						</div>
+						
+						<div class="img-group">
+							<img src="../img/img_menu3_game.svg" alt=" " class="img">
+						</div>
+					</a>
+				</li>
+			</ol>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

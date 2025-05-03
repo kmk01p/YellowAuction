@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=no">
+<title>무인가드</title>
+<link rel="stylesheet" href="../css/reset.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/component.css">
+<link rel="stylesheet" href="../css/modal.css">
+<link rel="stylesheet" href="../css/page.css">
+<script src="../js/jquery-1.11.1.min.js"></script>
+<script src="../js/jquery.easing.1.3.js"></script>
+<script src="../js/script.js"></script>
+</head>
+<body>
+
+<!--포인트 부족 모달창-->
+<div class="dim-layer js-modal">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-message">
+						<div class="txt">보유 포인트가 부족합니다.</div>
+					</div>
+					
+					<div class="btn-group-modal">
+						<button type="button" class="btn btn-custom js-modal-master-close">확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--포인트 미입력 모달창-->
+<div class="dim-layer js-modal2">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-message">
+						<div class="txt">포인트를 입력해주세요.</div>
+					</div>
+					
+					<div class="btn-group-modal">
+						<button type="button" class="btn btn-custom js-modal-master-close">확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="wrap">
+	<header class="header">
+		<div class="hd">
+			<div class="hd-tit">가위바위보</div>
+			<button type="button" class="hd-back" onclick="location.href='javascript:history.back(-1);'"></button>
+		</div>
+	</header>
+	
+	<div class="container">
+		<div class="flex-box rock-paper-scissors">
+			<div class="flex-content">
+				<div class="game-noti"><img src="../img/ico_confetti1.svg" alt=" ">무인이님 5연승 달성! (10.23 17:57)</div>
+				
+				<div class="inner">
+					<div class="top-section">
+						<div class="tit">가위바위보 대결!</div>
+						<div class="txt">다른 유저와 대결을 통해 포인트를 늘려보세요! <br>나의 포인트를 걸고 다른 유저와 대결할 수 있습니다.</div>
+					</div>
+					
+					<div class="rock-paper-scissors-group">
+						<div class="rock"></div>
+						<div class="scissors"></div>
+						<div class="paper"></div>
+					</div>
+					
+					<div class="game-guide">
+						<div class="txt">게임에 참여할 포인트를 입력해주세요.</div>
+					</div>
+					
+					<div class="point-data">
+						<div class="tit">현재 나의 포인트</div>
+						<div class="txt">2,525P</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="flex-bottom">
+				<input type="text" placeholder="포인트를 입력해주세요." class="inp-frm">
+				<button type="button" class="btn-custom" onclick="location.href='rps-loading.html'">참여하기</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

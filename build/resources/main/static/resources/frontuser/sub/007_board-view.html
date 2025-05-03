@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=no">
+<title>무인가드</title>
+<link rel="stylesheet" href="../css/reset.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/component.css">
+<link rel="stylesheet" href="../css/modal.css">
+<link rel="stylesheet" href="../css/page.css">
+<script src="../js/jquery-1.11.1.min.js"></script>
+<script src="../js/jquery.easing.1.3.js"></script>
+<script src="../js/script.js"></script>
+</head>
+<body>
+
+<!--수정 확인 모달창-->
+<div class="dim-layer js-modal">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-message">
+						<div class="txt">수정하시겠습니까?</div>
+					</div>
+					
+					<div class="btn-group-modal2">
+						<button type="button" class="btn btn-custom btn-custom-v1 js-modal-master-close">아니오</button>
+						<button type="button" class="btn btn-custom js-modal-master-close">예</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--삭제 확인 모달창-->
+<div class="dim-layer js-modal2">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-message">
+						<div class="txt">삭제하시겠습니까?</div>
+					</div>
+					
+					<div class="btn-group-modal2">
+						<button type="button" class="btn btn-custom btn-custom-v1 js-modal-master-close">아니오</button>
+						<button type="button" class="btn btn-custom js-modal-master-close">예</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="wrap">
+	<header class="header">
+		<div class="hd">
+			<div class="hd-tit">커뮤니티</div>
+			<button type="button" class="hd-back" onclick="location.href='javascript:history.back(-1);'"></button>
+			<a href="007_ad-pass.html" class="hd-btn">AD 패스</a>
+		</div>
+	</header>
+	
+	<div class="container">
+		<div class="board-view">
+			<div class="board-tool sticky">
+				<select class="select-custom2">
+					<option>자유게시판</option>
+					<option>관리자글</option>
+					<option>인기글</option>
+				</select>
+				<div class="btn-group-ico">
+					<a href="#" class="btn-ico btn-ico-search"></a>
+					<a href="007_friend.html" class="btn-ico btn-ico-friend"></a>
+					<a href="007_message.html" class="btn-ico btn-ico-message"></a>
+				</div>
+			</div>
+			
+			<div class="board-group">
+				<div class="inner">
+					<div class="board-top">
+						<div class="board-writer">
+							<div class="img-group">
+								<img src="../img/img_transparent1.png" alt="썸네일" class="thumb" style="background-image: url('../img/tmp/img_picture1.png');">
+							</div>
+							<div class="writer-name">무인이</div>
+						</div>
+						<div class="board-datetime">23.08.01 10:00</div>
+					</div>
+					
+					<div class="board-content">
+						<div class="board-title">1:1 투혼 연습하실 분 구합니다.</div>
+						<div class="board-txt">저는 현재 2,300점 래더 S입니다. <br><br>종족은 테란이구요 <br>상대방 종족은 상관 없습니다. <br><br>게임하실 분 댓글이나 쪽지 주세요.</div>
+					</div>
+					
+					<div class="board-util">
+						<div class="board-data">
+							<div><img src="../img/ico_view1.svg" alt=" ">1109</div>
+							
+							<div>
+								<div class="ck-group">
+									<input id="like_ck1" type="checkbox" name="like_ck" class="ck-custom-like">
+									<label for="like_ck1"><span class="custom"></span>11</label>
+								</div>
+							</div>
+							
+							<div><img src="../img/ico_reply1.svg" alt=" ">3</div>
+						</div>
+						
+						<div class="btn-group-board">
+							<button type="button" class="btn js-modal-open"><img src="../img/ico_write1.svg" alt=" ">수정하기</button>
+							<button type="button" class="btn js-modal2-open"><img src="../img/ico_delete1.svg" alt=" ">삭제하기</button>
+							<button type="button" class="btn btn-v1">신고하기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="comment-group">
+				<ol class="list-comment">
+					<li>
+						<div class="box">
+							<div class="comment-content">
+								<div class="comment-info">
+									<div class="img-group">
+										<img src="../img/img_transparent1.png" alt="썸네일" class="thumb" style="background-image: url('../img/tmp/img_picture1.png');">
+									</div>
+
+									<div class="user-title">
+										<div class="user-name">무인이</div>
+										<div class="comment-datetime">10:01</div>
+									</div>
+								</div>
+
+								<div class="txt">[삭제된 댓글입니다.]</div>
+
+								<div class="comment-tool">
+									<button type="button" class="btn"><img src="../img/ico_reply2.svg" alt=" ">답글달기</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="box">
+							<div class="comment-content">
+								<div class="comment-info">
+									<div class="img-group">
+										<img src="../img/img_transparent1.png" alt="썸네일" class="thumb" style="background-image: url('../img/tmp/img_picture2.png');">
+									</div>
+
+									<div class="user-title">
+										<div class="user-name">범식이</div>
+										<div class="comment-datetime">10:01</div>
+									</div>
+								</div>
+
+								<div class="txt">[삭제된 댓글입니다.]</div>
+
+								<div class="comment-tool">
+									<button type="button" class="btn"><img src="../img/ico_reply2.svg" alt=" ">답글달기</button>
+									<button type="button" class="btn js-modal-open"><img src="../img/ico_write1.svg" alt=" ">수정하기</button>
+									<button type="button" class="btn js-modal2-open"><img src="../img/ico_delete1.svg" alt=" ">삭제하기</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="box">
+							<div class="comment-content">
+								<div class="comment-info">
+									<div class="img-group">
+										<img src="../img/img_transparent1.png" alt="썸네일" class="thumb" style="background-image: url('../img/tmp/img_picture1.png');">
+									</div>
+
+									<div class="user-title">
+										<div class="user-name">무인이</div>
+										<div class="comment-datetime">10:01</div>
+									</div>
+								</div>
+
+								<div class="txt">저 하고 싶습니다.  종족 저그입니다.</div>
+
+								<div class="comment-tool">
+									<button type="button" class="btn"><img src="../img/ico_reply2.svg" alt=" ">답글달기</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="box">
+							<div class="comment-content">
+								<div class="comment-info">
+									<div class="img-group">
+										<img src="../img/img_transparent1.png" alt="썸네일" class="thumb" style="background-image: url('../img/tmp/img_picture2.png');">
+									</div>
+
+									<div class="user-title">
+										<div class="user-name">범식이</div>
+										<div class="comment-datetime">10:01</div>
+									</div>
+								</div>
+
+								<div class="txt">채널 0000에서 봬요~</div>
+
+								<div class="comment-tool">
+									<button type="button" class="btn"><img src="../img/ico_reply2.svg" alt=" ">답글달기</button>
+									<button type="button" class="btn js-modal-open"><img src="../img/ico_write1.svg" alt=" ">수정하기</button>
+									<button type="button" class="btn js-modal2-open"><img src="../img/ico_delete1.svg" alt=" ">삭제하기</button>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li>
+						<div class="box">
+							<div class="comment-content">
+								<div class="comment-info">
+									<div class="img-group">
+										<img src="../img/img_transparent1.png" alt="썸네일" class="thumb" style="background-image: url('../img/tmp/img_picture1.png');">
+									</div>
+
+									<div class="user-title">
+										<div class="user-name">무인이</div>
+										<div class="comment-datetime">10:01</div>
+									</div>
+								</div>
+
+								<div class="txt">[삭제된 댓글입니다.]</div>
+
+								<div class="comment-tool">
+									<button type="button" class="btn"><img src="../img/ico_reply2.svg" alt=" ">답글달기</button>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li>
+						<div class="box">
+							<div class="comment-content">
+								<div class="comment-info">
+									<div class="img-group">
+										<img src="../img/img_transparent1.png" alt="썸네일" class="thumb" style="background-image: url('../img/tmp/img_picture1.png');">
+									</div>
+
+									<div class="user-title">
+										<div class="user-name">무인이</div>
+										<div class="comment-datetime">10:01</div>
+									</div>
+								</div>
+
+								<div class="txt">[삭제된 댓글입니다.]</div>
+
+								<div class="comment-tool">
+									<button type="button" class="btn"><img src="../img/ico_reply2.svg" alt=" ">답글달기</button>
+									<button type="button" class="btn js-modal-open"><img src="../img/ico_write1.svg" alt=" ">수정하기</button>
+									<button type="button" class="btn js-modal2-open"><img src="../img/ico_delete1.svg" alt=" ">삭제하기</button>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ol>
+			</div>
+			
+			<div class="board-navigation">
+				<dl><dt class="tit"><a href="#"><img src="../img/common/ico_arrow_navigation1_prev1.svg" alt=" ">이전글</a></dt></dl>
+				<dl><dt class="tit"><a href="#">다음글<img src="../img/common/ico_arrow_navigation1_next1.svg" alt=" "></a></dt></dl>
+			</div>
+			
+			<div class="btn-floating-comment">
+				<div class="inp-group-comment">
+					<textarea placeholder="댓글을 남겨주세요." class="inp-comment js-comment"></textarea>
+					<button type="button" class="btn-send"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

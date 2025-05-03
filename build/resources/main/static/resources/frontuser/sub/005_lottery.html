@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=no">
+<title>무인가드</title>
+<link rel="stylesheet" href="../css/reset.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/component.css">
+<link rel="stylesheet" href="../css/modal.css">
+<link rel="stylesheet" href="../css/page.css">
+<script src="../js/jquery-1.11.1.min.js"></script>
+<script src="../js/jquery.easing.1.3.js"></script>
+<script src="../js/script.js"></script>
+</head>
+<body>
+
+<!--포인트 부족 모달창-->
+<div class="dim-layer js-modal">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-message">
+						<div class="txt">보유 포인트가 부족합니다.</div>
+					</div>
+					
+					<div class="btn-group-modal">
+						<button type="button" class="btn btn-custom js-modal-master-close">확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="wrap">
+	<header class="header">
+		<div class="hd">
+			<div class="hd-tit">행운의 뽑기</div>
+			<button type="button" class="hd-back" onclick="location.href='javascript:history.back(-1);'"></button>
+		</div>
+	</header>
+	
+	<div class="container">
+		<div class="flex-box lottery">
+			<div class="flex-content">
+				<div class="game-noti"><img src="../img/ico_confetti1.svg" alt=" ">무인이님 5연승 달성! (10.23 17:57)</div>
+				
+				<div class="inner">
+					<div class="lottery-group">
+						<div class="top-lottery">
+							<div class="tit">행운의 뽑기</div>
+							<div class="txt">추억의 뽑기 게임을 통해 포인트를 모아보세요!</div>
+						</div>
+
+						<div class="box">
+							<ol class="list-lottery">
+								<li class="blind">
+									<div class="card card-v3">
+										<div class="img-group"></div>
+										<div class="ranking">3등</div>
+									</div>
+								</li>
+
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v1">
+										<div class="img-group"></div>
+										<div class="ranking">1등</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v3">
+										<div class="img-group"></div>
+										<div class="ranking">4등</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v3">
+										<div class="img-group"></div>
+										<div class="ranking">4등</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v3">
+										<div class="img-group"></div>
+										<div class="ranking">4등</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v3">
+										<div class="img-group"></div>
+										<div class="ranking">4등</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v2">
+										<div class="img-group"></div>
+										<div class="ranking">2등</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v3">
+										<div class="img-group"></div>
+										<div class="ranking">3등</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v3">
+										<div class="img-group"></div>
+										<div class="ranking">4등</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v3">
+										<div class="img-group"></div>
+										<div class="ranking">4등</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v3">
+										<div class="img-group"></div>
+										<div class="ranking">3등</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v3">
+										<div class="img-group"></div>
+										<div class="ranking">4등</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v3">
+										<div class="img-group"></div>
+										<div class="ranking">4등</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v3">
+										<div class="img-group"></div>
+										<div class="ranking">4등</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v3">
+										<div class="img-group"></div>
+										<div class="ranking">3등</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v4">
+										<div class="img-group"></div>
+										<div class="ranking">꽝</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v3">
+										<div class="img-group"></div>
+										<div class="ranking">3등</div>
+									</div>
+								</li>
+								
+								<li class="blind">
+									<div class="card card-v3">
+										<div class="img-group"></div>
+										<div class="ranking">4등</div>
+									</div>
+								</li>
+							</ol>
+						</div>
+					</div>
+					
+					<div class="game-guide">
+						<div class="txt">게임 참여시 50P가 소진됩니다.</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="flex-bottom">
+				<button type="button" class="btn-custom" onclick="location.href='lottery2.html'">시작하기</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

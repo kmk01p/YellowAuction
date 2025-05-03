@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=no">
+<title>무인가드</title>
+<link rel="stylesheet" href="../css/reset.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/component.css">
+<link rel="stylesheet" href="../css/modal.css">
+<link rel="stylesheet" href="../css/page.css">
+<script src="../js/jquery-1.11.1.min.js"></script>
+<script src="../js/jquery.easing.1.3.js"></script>
+<script src="../js/script.js"></script>
+</head>
+<body>
+
+<!--ID 입력 모달창-->
+<div class="dim-layer js-modal">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-frm">
+						<div class="txt">쿠폰을 선물 받으실 분의 ID를 입력해주세요.</div>
+						
+						<div class="frm-group">
+							<div class="tit-frm">받으실 분</div>
+							<input type="text" placeholder="상대방 ID를 적어주세요. (앱 기본화면 우측상단)" class="inp-frm" style="letter-spacing: -1.1px;">
+						</div>
+					</div>
+					
+					<div class="btn-group-modal">
+						<button type="button" class="btn btn-custom js-modal-master-close js-modal2-open">확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--쿠폰 없음 모달창-->
+<div class="dim-layer js-modal2">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-message">
+						<div class="txt">사용할 쿠폰이 없습니다.</div>
+					</div>
+					
+					<div class="btn-group-modal">
+						<button type="button" class="btn btn-custom js-modal-master-close">확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--ID 확인 모달창-->
+<div class="dim-layer js-modal3">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-message">
+						<div class="txt">상대방의 ID를 확인해주세요.</div>
+					</div>
+					
+					<div class="btn-group-modal">
+						<button type="button" class="btn btn-custom js-modal-master-close">확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--전달 확인 모달창-->
+<div class="dim-layer js-modal4">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-point2">
+						<div class="modal-title">전달하시겠습니까?</div>
+						
+						<div class="txt-group">
+							<div class="tit">받으실 분</div>
+							<div class="txt"> 000000002</div>
+						</div>
+						
+						<div class="txt-group">
+							<div class="tit">전달 쿠폰</div>
+							<div class="txt"> 총 2개</div>
+						</div>
+					</div>
+					
+					<div class="btn-group-modal2">
+						<button type="button" class="btn btn-custom btn-custom-v1 js-modal-master-close js-modal6-open">아니오</button>
+						<button type="button" class="btn btn-custom js-modal-master-close js-modal5-open">예</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--전달 완료 모달창-->
+<div class="dim-layer js-modal5">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-message">
+						<div class="txt">전달이 완료되었습니다.</div>
+					</div>
+					
+					<div class="btn-group-modal">
+						<button type="button" class="btn btn-custom js-modal-master-close">확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--취소 모달창-->
+<div class="dim-layer js-modal6">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-message">
+						<div class="txt">취소되었습니다.</div>
+					</div>
+					
+					<div class="btn-group-modal">
+						<button type="button" class="btn btn-custom js-modal-master-close">확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="wrap">
+	<header class="header">
+		<div class="hd">
+			<div class="hd-tit">포인트쿠폰 선물하기</div>
+			<button type="button" class="hd-back" onclick="location.href='javascript:history.back(-1);'"></button>
+		</div>
+	</header>
+	
+	<div class="container">
+		<div class="flex-box coupon-present">
+			<div class="flex-container">
+				<div class="search-result">
+					<div class="box">
+						<div class="tit">보유쿠폰</div>
+						<div class="txt">3개</div>
+					</div>
+				</div>
+
+				<div class="table-group">
+					<table class="tbl tbl-v5">
+						<thead>
+							<tr>
+								<th class="t1">
+									<div class="ck-group">
+										<input id="ck0" type="checkbox" name="all_ck" class="ck-custom">
+										<label for="ck0"><span class="custom"></span></label>
+									</div>
+								</th>
+								<th class="t2">쿠폰번호</th>
+								<th class="t3">지급P</th>
+								<th class="t4">유효기간</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr>
+								<td class="t1">
+									<div class="ck-group">
+										<input id="ck1" type="checkbox" name="ck" class="ck-custom js-ck">
+										<label for="ck1"><span class="custom"></span></label>
+									</div>
+								</td>
+								<td class="t2">1234-1234-abcd-abcd</td>
+								<td class="t3"><strong>100P</strong></td>
+								<td class="t4"><span>23.12.25</span></td>
+							</tr>
+
+							<tr>
+								<td class="t1">
+									<div class="ck-group">
+										<input id="ck2" type="checkbox" name="ck" class="ck-custom js-ck">
+										<label for="ck2"><span class="custom"></span></label>
+									</div>
+								</td>
+								<td class="t2">1234-1234-abcd-abcd</td>
+								<td class="t3"><strong>100P</strong></td>
+								<td class="t4"><span>23.12.25</span></td>
+							</tr>
+
+							<tr>
+								<td class="t1">
+									<div class="ck-group">
+										<input id="ck3" type="checkbox" name="ck" class="ck-custom js-ck">
+										<label for="ck3"><span class="custom"></span></label>
+									</div>
+								</td>
+								<td class="t2">1234-1234-abcd-abcd</td>
+								<td class="t3"><strong>100P</strong></td>
+								<td class="t4"><span>23.12.25</span></td>
+							</tr>
+
+							<tr>
+								<td class="t1">
+									<div class="ck-group">
+										<input id="ck4" type="checkbox" name="ck" class="ck-custom js-ck">
+										<label for="ck4"><span class="custom"></span></label>
+									</div>
+								</td>
+								<td class="t2">1234-1234-abcd-abcd</td>
+								<td class="t3"><strong>100P</strong></td>
+								<td class="t4"><span>23.12.25</span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			
+			<div class="flex-bottom">
+				<button type="button" class="btn-custom js-active js-modal-open" disabled>선물하기</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

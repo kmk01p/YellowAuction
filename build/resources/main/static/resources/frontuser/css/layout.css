@@ -1,0 +1,27 @@
+/*layout style*/
+#wrap { position: relative; max-width: 600px; height: 100%; margin: 0 auto; transition: .2s all ease-out; }
+.container { position: relative; width: 100%; height: 100%; transition: .2s all ease-out; }
+.container > div { min-height: 100%; padding-top: 64px; box-shadow: 0 0 2px 2px #f2f2f2; box-sizing: border-box; }
+.flex-box { display: flex; flex-direction: column; justify-content: space-between; min-height: 100%; }
+
+
+/*header style*/
+.header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; max-width: 600px; margin: 0 auto; background: var(--main-bg-color); transition: .2s all ease-out; }
+.hd { display: flex; justify-content: space-between; align-items: center; height: 64px; padding: 0 24px; border-bottom: 1px solid #d9d9d9; box-sizing: border-box; }
+.hd .hd-tit { position: absolute; left: 0; right: 0; margin: 0 auto; font-size: 20px; font-weight: 700; color: var(--main-text-color); text-align: center; }
+.hd .hd-back { position: relative; width: 24px; height: 24px; border: none; background: url('../img/common/ico_arrow_back1.png') center center no-repeat; }
+.hd .hd-search { position: relative; width: 24px; height: 24px; border: none; background: url('../img/common/ico_search1.png') center center no-repeat; }
+.hd .hd-btn { display: flex; justify-content: center; align-items: center; position: relative; height: 30px; padding: 0 7px; border: 1px solid var(--main-bg-color); border-radius: 5px; box-sizing: border-box; background: none; font-size: 10px; font-weight: 500; color: var(--main-bg-color); }
+
+
+/*footer style*/
+.footer { position: fixed; left: 0; right: 0; bottom: 0; z-index: 100; max-width: 600px; margin: 0 auto; background: var(--main-bg-color); transition: .2s all ease-out; }
+.ft .ft-menu { display: flex; align-items: center; border-bottom: 1px solid #f4f4f4; box-sizing: border-box; }
+.ft .ft-menu:last-child { border-bottom: none; }
+.ft .ft-menu a { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 25%; height: 85px; }
+.ft .ft-menu .tit { margin-top: 4px; font-size: 13px; font-weight: 500; color: var(--main-text-color); text-align: center; }
+
+
+@media only screen and (max-width: 600px) {
+	#wrap, .header { max-width: 100%; }
+}

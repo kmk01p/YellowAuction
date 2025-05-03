@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=no">
+<title>무인가드</title>
+<link rel="stylesheet" href="../css/reset.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/component.css">
+<link rel="stylesheet" href="../css/modal.css">
+<link rel="stylesheet" href="../css/page.css">
+<script src="../js/jquery-1.11.1.min.js"></script>
+<script src="../js/jquery.easing.1.3.js"></script>
+<script src="../js/script.js"></script>
+</head>
+<body>
+
+<div id="wrap">
+	<header class="header">
+		<div class="hd">
+			<div class="hd-tit">가위바위보</div>
+			<button type="button" class="hd-back" onclick="location.href='javascript:history.back(-1);'"></button>
+		</div>
+	</header>
+	
+	<div class="container">
+		<div class="flex-box rps-result">
+			<div class="flex-content">
+				<div class="game-noti"><img src="../img/ico_confetti1.svg" alt=" ">무인이님 5연승 달성! (10.23 17:57)</div>
+				
+				<div class="inner">
+					<!--상대방 이탈 시 vs-group-v1 클래스 추가-->
+					<div class="vs-group">
+						<div class="vs-info">
+							<div class="img-group img-group-v1">
+								<img src="../img/img_transparent1.png" alt="썸네일" class="thumb" style="background-image: url('../img/ico_scissors1.svg');">
+							</div>
+							<div class="user-name">무인이</div>
+							<div class="betting-info">
+								<div class="tit">대결포인트</div>
+								<div class="txt">1,000</div>
+							</div>
+						</div>
+						
+						<div class="vs-info">
+							<div class="img-group img-group-v1">
+								<img src="../img/img_transparent1.png" alt="썸네일" class="thumb" style="background-image: url('../img/ico_scissors1.svg');">
+							</div>
+							<div class="user-name">파란하늘</div>
+							<div class="betting-info">
+								<div class="tit">대결포인트</div>
+								<div class="txt">500</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="game-guide">
+						<div class="tit">무승부예요!</div>
+						<div class="txt">다시 한 번 게임을 시작합니다!</div>
+					</div>
+					
+					<div class="game-guide">
+						<div class="tit">축하합니다!</div>
+						<div class="txt">게임에서 승리하였습니다!</div>
+						<div class="txt2">총 1,425P를 획득하였습니다! (승리수수료 5%)</div>
+					</div>
+					
+					<div class="game-guide">
+						<div class="tit">아쉽네요!</div>
+						<div class="txt">게임에서 패배하였습니다.</div>
+						<div class="txt2">총 500P를 잃었습니다.</div>
+					</div>
+					
+					<div class="point-data">
+						<div class="tit">현재 나의 포인트</div>
+						<div class="txt">2000P</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="flex-bottom">
+				<button type="button" class="btn-custom">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

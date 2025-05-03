@@ -3,26 +3,110 @@
 <head>
     <title>로그인</title>
     <meta charset="UTF-8">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
     <!-- jQuery 로드 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        /* 기본 리셋 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        body {
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-card {
+            background: #ffffff;
+            padding: 2rem;
+            width: 320px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .login-card h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+        #loginError {
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 1rem;
+            min-height: 1em;
+        }
+
+        .login-card form div {
+            margin-bottom: 1rem;
+        }
+        .login-card label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        .login-card input {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        .login-card button {
+            width: 100%;
+            padding: 0.7rem;
+            background: #4a90e2;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .login-card button:hover {
+            background: #357ab8;
+        }
+        .login-card p {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        .login-card p a {
+            color: #4a90e2;
+            text-decoration: none;
+        }
+        .login-card p a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-<h2>로그인</h2>
-<div id="loginError" style="color:red;"></div>
-<form id="loginForm">
-    <div>
-        <label>아이디:</label>
-        <input type="text" name="username" required />
-    </div>
-    <div>
-        <label>비밀번호:</label>
-        <input type="password" name="password" required />
-    </div>
-    <div>
-        <button type="submit">로그인</button>
-    </div>
-</form>
-<p>계정이 없으신가요? <a th:href="@{/register}">회원가입하기</a></p>
+<div class="login-card">
+    <h2>로그인</h2>
+    <div id="loginError"></div>
+    <form id="loginForm">
+        <div>
+            <label>아이디</label>
+            <input type="text" name="username" required />
+        </div>
+        <div>
+            <label>비밀번호</label>
+            <input type="password" name="password" required />
+        </div>
+        <div>
+            <button type="submit">로그인</button>
+        </div>
+    </form>
+    <p>계정이 없으신가요? <a th:href="@{/register}">회원가입하기</a></p>
+</div>
 
 <script>
     $(function(){
@@ -38,17 +122,14 @@
                 data: JSON.stringify({ username, password }),
                 dataType: 'json',
                 success: function(user) {
-                    // ADMIN 계정
                     if (user.role === 'ADMIN') {
-                        window.location.href = '/admin/dashboard';
+                        window.location.href = 'dashboard/admin_dashboard';
                     }
-                    // 구인(EMPLOYER)
                     else if (user.userType === 'EMPLOYER') {
-                        window.location.href = '/com/dashboard';
+                        window.location.href = 'dashboard/com_dashboard';
                     }
-                    // 구직(FREELANCER)
                     else if (user.userType === 'FREELANCER') {
-                        window.location.href = '/free/dashboard';
+                        window.location.href = 'dashboard/free_dashboard';
                     }
                 },
                 error: function(xhr) {

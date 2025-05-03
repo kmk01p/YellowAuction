@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=no">
+<title>무인가드</title>
+<link rel="stylesheet" href="../css/reset.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/component.css">
+<link rel="stylesheet" href="../css/modal.css">
+<link rel="stylesheet" href="../css/page.css">
+<script src="../js/jquery-1.11.1.min.js"></script>
+<script src="../js/jquery.easing.1.3.js"></script>
+<script src="../js/script.js"></script>
+</head>
+<body>
+
+<!--탈퇴하기 모달창-->
+<div class="dim-layer js-modal">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-message">
+						<div class="tit">잠깐!</div>
+						<div class="txt">회원 탈퇴를 하시면 더이상 <br>QR 인증으로 출입하실 수 없어요!</div>
+					</div>
+					
+					<div class="btn-group-modal">
+						<button type="button" class="btn btn-custom btn-custom-v1 js-modal-master-close" onclick="location.href='withdraw-complete.html'">그래도 탈퇴할래요.</button>
+						<button type="button" class="btn btn-custom js-modal-master-close">아니오, 탈퇴 안 할래요.</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="wrap">
+	<header class="header">
+		<div class="hd">
+			<div class="hd-tit">개인정보 관리</div>
+			<button type="button" class="hd-back" onclick="location.href='javascript:history.back(-1);'"></button>
+		</div>
+	</header>
+	
+	<div class="container">
+		<div class="flex-box withdraw">
+			<div class="flex-content">
+				<div class="top-page">
+					<div class="tit">회원탈퇴</div>
+				</div>
+
+				<div class="tit-group">
+					<div class="tit">고객님의 ID는 <br><strong>000000001</strong> 입니다.</div>
+					<div class="txt">단말기가 변경되거나 휴대폰 번호 변경으로 <br>재인증이 필요할 때 꼭 기억해주세요. <br>ID를 잊어버리면 해당 포인트도 소멸됩니다.</div>
+				</div>
+			</div>
+
+			<div class="flex-bottom">
+				<div class="btn-group">
+					<button type="button" class="btn btn-custom btn-custom-v1 js-modal-open">탈퇴하기</button>
+					<button type="button" class="btn btn-custom" onclick="location.href='link.html'">유지하기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

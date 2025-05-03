@@ -1,0 +1,76 @@
+<!-- src/main/resources/static/com/profile/list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>회사 프로필 목록</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h2>회사 프로필 목록</h2>
+<button onclick="location.href='/profile/com_create.html'">새 회사 등록</button>
+<table border="1" id="profileTable" style="margin-top:10px; width:100%;">
+    <thead>
+    <tr>
+        <th>회사명</th>
+        <th>대표자명</th>
+        <th>기업규모</th>
+        <th>설립일</th>
+        <th>주요업종</th>
+        <th>주소</th>
+        <th>사원수</th>
+        <th>자본금</th>
+        <th>연매출</th>
+        <th>홈페이지</th>
+        <th>전화번호</th>
+        <th>이메일</th>
+        <th>작업</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    // 목록 불러오기
+    function loadList(){
+        $.getJSON('/api/com/profile', function(res){
+            const tbody = $('#profileTable tbody').empty();
+            res.data.forEach(p=>{
+                $('<tr>')
+                    .append(`<td>${p.companyName}</td>`)
+                    .append(`<td>${p.representative}</td>`)
+                    .append(`<td>${p.companySize}</td>`)
+                    .append(`<td>${p.establishedDate}</td>`)
+                    .append(`<td>${p.mainIndustry}</td>`)
+                    .append(`<td>${p.address}</td>`)
+                    .append(`<td>${p.employees}</td>`)
+                    .append(`<td>${p.capital}</td>`)
+                    .append(`<td>${p.annualRevenue}</td>`)
+                    .append(`<td><a href="${p.homepageUrl}" target="_blank">${p.homepageUrl}</a></td>`)
+                    .append(`<td>${p.phone}</td>`)
+                    .append(`<td>${p.email}</td>`)
+                    .append(`<td>
+
+                        <button onclick="location.href='/profile/com_update?id=${p.id}'">수정</button>
+                        <button onclick="deleteProfile(${p.id})">삭제</button>
+                     </td>`)
+                    .appendTo(tbody);
+            });
+        });
+    }
+
+    // 삭제
+    function deleteProfile(id){
+        if(confirm('정말 삭제하시겠습니까?')){
+            $.ajax({
+                url: `/api/com/profile/${id}`,
+                method: 'DELETE',
+                success: loadList
+            });
+        }
+    }
+
+    $(document).ready(loadList);
+</script>
+</body>
+</html>

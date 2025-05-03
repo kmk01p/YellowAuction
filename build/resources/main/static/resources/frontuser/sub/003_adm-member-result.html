@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=no">
+<title>무인가드</title>
+<link rel="stylesheet" href="../css/jquery-ui.css">
+<link rel="stylesheet" href="../css/datepicker.css">
+<link rel="stylesheet" href="../css/reset.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/component.css">
+<link rel="stylesheet" href="../css/modal.css">
+<link rel="stylesheet" href="../css/page.css">
+<script src="../js/jquery-1.11.1.min.js"></script>
+<script src="../js/jquery.easing.1.3.js"></script>
+<script src="../js/jquery-ui.js"></script>
+<script src="../js/script.js"></script>
+<script>
+	$(function(){
+		$.datepicker.regional['ko'] = {
+        closeText: '닫기',
+        prevText: '이전달',
+        nextText: '다음달',
+        currentText: '오늘',
+        monthNames: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+        monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+        dayNames: ['일','월','화','수','목','금','토'],
+        dayNamesShort: ['일','월','화','수','목','금','토'],
+        dayNamesMin: ['일','월','화','수','목','금','토'],
+        weekHeader: 'Wk',
+        dateFormat: 'yy.mm.dd',
+        firstDay: 0,
+        isRTL: false,
+        showMonthAfterYear: true,
+		showOtherMonths: true,
+		selectOtherMonths: true
+        };
+        $.datepicker.setDefaults($.datepicker.regional['ko']);
+        
+        $(".inp-date").datepicker();
+		
+        //초기값을 오늘 날짜로 설정
+        $(".inp-date-start").datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후
+		//초기값을 내일 날짜로 설정
+        $(".inp-date-end").datepicker('setDate', '+1D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+    });
+</script>
+</head>
+<body>
+
+<div id="wrap">
+	<header class="header">
+		<div class="hd">
+			<div class="hd-tit">승인관리</div>
+			<button type="button" class="hd-back" onclick="location.href='javascript:history.back(-1);'"></button>
+		</div>
+	</header>
+	
+	<div class="container">
+		<div class="adm-member">
+			<div class="search-result">
+				<div class="box">
+					<div class="tit">승인대기</div>
+					<div class="txt">1명</div>
+					<a href="adm-member.html" class="btn"></a>
+				</div>
+			</div>
+			
+			<div class="table-group">
+				<div class="datetime-group">
+					<div class="tit">일자조회</div>
+					<div class="inp-group inp-group-date">
+						<input type="text" placeholder="From" class="inp-date">
+						<span class="unit">-</span>
+						<input type="text" placeholder="To" class="inp-date">
+					</div>
+				</div>
+				
+				<table class="tbl tbl-v4">
+					<thead>
+						<tr>
+							<th class="t1">이름</th>
+							<th class="t2">연락처</th>
+							<th class="t3">생년월일</th>
+							<th class="t4">성인여부</th>
+							<th class="t5">승인여부</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<tr onclick="location.href='adm-member-view.html'">
+							<td class="t1">김무인</td>
+							<td class="t2">010-1111-1111</td>
+							<td class="t3">910322(남)</td>
+							<td class="t4">성인</td>
+							<td class="t5"><div class="state state-v1">대기</div></td>
+						</tr>
+						
+						<tr onclick="location.href='adm-member-view.html'">
+							<td class="t1">오아름</td>
+							<td class="t2">010-1121-1111</td>
+							<td class="t3">120123(여)</td>
+							<td class="t4">미성년</td>
+							<td class="t5"><div class="state">승인</div></td>
+						</tr>
+						
+						<tr onclick="location.href='adm-member-view.html'">
+							<td class="t1">김무인</td>
+							<td class="t2">010-1111-1111</td>
+							<td class="t3">910322(남)</td>
+							<td class="t4">성인</td>
+							<td class="t5"><div class="state">승인</div></td>
+						</tr>
+						
+						<tr onclick="location.href='adm-member-view.html'">
+							<td class="t1">김무인</td>
+							<td class="t2">010-1111-1111</td>
+							<td class="t3">910322(남)</td>
+							<td class="t4">성인</td>
+							<td class="t5"><div class="state">승인</div></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

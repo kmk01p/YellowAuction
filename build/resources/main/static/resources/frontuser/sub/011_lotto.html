@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=no">
+<title>무인가드</title>
+<link rel="stylesheet" href="../css/reset.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/component.css">
+<link rel="stylesheet" href="../css/modal.css">
+<link rel="stylesheet" href="../css/page.css">
+<script src="../js/jquery-1.11.1.min.js"></script>
+<script src="../js/jquery.easing.1.3.js"></script>
+<script src="../js/script.js"></script>
+</head>
+<body>
+
+<!--로또 번호 미선택 모달창-->
+<div class="dim-layer js-modal">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-message">
+						<div class="txt">로또번호가 모두 선택되지 않았습니다. <br>다시 확인해주세요.</div>
+					</div>
+					
+					<div class="btn-group-modal">
+						<button type="button" class="btn btn-custom js-modal-master-close">확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--로또 번호 선택 모달창-->
+<div class="dim-layer js-modal2">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-message">
+						<div class="txt">6개의 번호가 모두 선택되었습니다!</div>
+					</div>
+					
+					<div class="btn-group-modal">
+						<button type="button" class="btn btn-custom js-modal-master-close">확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--로또 생성 모달창-->
+<div class="dim-layer js-modal3">
+	<div class="modal-group modal-group-message">
+		<div class="dim-bg"></div>
+		<div id="layer" class="modal-layer">
+			<div class="modal-container">
+				<div class="box-modal">
+					<div class="modal-message">
+						<div class="txt">무인가드 로또가 생성되었습니다. <br>매주 월요일 복권 당첨 여부가 발표됩니다.</div>
+						<div class="txt2">제출한 로또는 내 정보 > 무인가드 로또 탭에서 확인 가능합니다.</div>
+					</div>
+					
+					<div class="btn-group-modal">
+						<button type="button" class="btn btn-custom js-modal-master-close" onclick="location.href='lotto-list.html'">확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="wrap">
+	<header class="header">
+		<div class="hd">
+			<div class="hd-tit">무인가드 로또</div>
+			<button type="button" class="hd-back" onclick="location.href='javascript:history.back(-1);'"></button>
+		</div>
+	</header>
+	
+	<div class="container">
+		<div class="flex-box lotto">
+			<div class="flex-content">
+				<div class="article">
+					<div class="top-article">
+						<div class="tit">무인가드 로또 사용하기</div>
+					</div>
+					
+					<div class="lotto-guide">
+						<img src="../img/img_lotto1.svg" alt=" ">
+						<div class="txt">6개의 번호를 선택해주세요.</div>
+					</div>
+
+					<div class="lotto-group">
+						<ol class="list-lotto-num">
+							<li>
+								<div class="ck-group">
+									<input id="ck1" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck1">1</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck2" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck2">2</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck3" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck3">3</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck4" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck4">4</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck5" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck5">5</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck6" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck6">6</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck7" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck7">7</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck8" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck8">8</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck9" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck9">9</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck10" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck10">10</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck11" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck11">11</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck12" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck12">12</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck13" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck13">13</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck14" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck14">14</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck15" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck15">15</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck16" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck16">16</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck17" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck17">17</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck18" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck18">18</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck19" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck19">19</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck20" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck20">20</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck21" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck21">21</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck22" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck22">22</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck23" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck23">23</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck24" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck24">24</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck25" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck25">25</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck26" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck26">26</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck27" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck27">27</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck28" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck28">28</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck29" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck29">29</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck30" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck30">30</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck31" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck31">31</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck32" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck32">32</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck33" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck33">33</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck34" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck34">34</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck35" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck35">35</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck36" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck36">36</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck37" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck37">37</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck38" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck38">38</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck39" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck39">39</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck40" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck40">40</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck41" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck41">41</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck42" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck42">42</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck43" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck43">43</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck44" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck44">44</label>
+								</div>
+							</li>
+
+							<li>
+								<div class="ck-group">
+									<input id="ck45" type="checkbox" name="ck" class="ck-custom-lotto">
+									<label for="ck45">45</label>
+								</div>
+							</li>
+						</ol>
+					</div>
+				</div>
+				
+				<div class="article">
+					<div class="top-article">
+						<div class="tit">선택 번호</div>
+					</div>
+					
+					<div class="lotto-select-group">
+						<ol class="list-lotto-select-num">
+							<li><div class="num">1</div></li>
+							<li><div class="num">12</div></li>
+							<li><div class="num">20</div></li>
+							<li><div class="num">26</div></li>
+							<li><div class="num">39</div></li>
+							<li><div class="num">43</div></li>
+						</ol>
+					</div>
+				</div>
+			</div>
+			
+			<div class="flex-bottom">
+				<button type="button" class="btn-custom js-modal-open">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
