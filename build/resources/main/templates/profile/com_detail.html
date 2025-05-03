@@ -57,7 +57,7 @@
     $('#profileId').val(id);
 
     // 기존 데이터 로드
-    $.getJSON(`/api/com/profile/${id}`, function(res){
+    $.getJSON(`/api/profile/${id}`, function(res){
         const p = res.data;
         $('#companyName').val(p.companyName);
         $('#representative').val(p.representative);
@@ -90,12 +90,12 @@
             email: $('#email').val()
         };
         $.ajax({
-            url: `/api/com/profile/${id}`,
+            url: `/api/profile/${id}`,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(dto),
             success: function(){
-                location.href = '/com/profile/list.html';
+                location.href = '/profile/com_list.html';
             }
         });
     });

@@ -65,7 +65,7 @@
             email: $('#email').val()
         };
         $.ajax({
-            url: '/api/com/profile',
+            url: '/api/profile',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(dto),
