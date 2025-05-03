@@ -1,8 +1,9 @@
 package com.example.yellowaution.service;
 
 import com.example.yellowaution.domain.User;
+import com.example.yellowaution.dto.UserRegisterDto;
 
 public interface UserService {
-    void register(String username, String password, String userType);
+    void register(UserRegisterDto dto);
     User login(String username, String password);
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,8 +30,8 @@ public class ProfileDto {
     // 프리랜서 전용
     private String jobType;
     private String career;
-    private String techStack;
+    private List<String> techStack;
 
-    //소유자 식별을 위한 필드
+    // 유저 연동
     private Long userId;
 }

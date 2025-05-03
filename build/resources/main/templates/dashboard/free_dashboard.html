@@ -22,17 +22,14 @@
 <nav th:if="${session.loginUser != null}" style="margin-top:20px;">
     <ul style="list-style:none; padding:0;">
         <li style="display:inline; margin-right:10px;">
-            <a onclick="location.href='/profile/free_list.html'">개인 프로필 목록</a>
-        </li>
-        <li style="display:inline; margin-right:10px;">
-            <a onclick="location.href='/profile/free_create.html'">개인 프로필 등록</a>
+            <a onclick="location.href='/profile/free_list.html'">마이페이지</a>
         </li>
     </ul>
 </nav>
 <nav th:if="${session.loginUser != null}" style="margin-top:20px;">
     <ul style="list-style:none; padding:0;">
         <li style="display:inline; margin-right:10px;">
-            <a onclick="location.href='/board/list.html'">프로젝트 목록</a>
+            <a onclick="location.href='/board/list.html'">경매</a>
         </li>
     </ul>
 </nav>
