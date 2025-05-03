@@ -2,47 +2,52 @@ package com.example.yellowaution.controller;
 
 import com.example.yellowaution.dto.ApiResponse;
 import com.example.yellowaution.dto.ProfileDto;
+import com.example.yellowaution.security.UserPrincipal;
 import com.example.yellowaution.service.ProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 @RestController
 @RequestMapping("/api/com/profile")
 @RequiredArgsConstructor
 public class ProfileRestController {
+
     private final ProfileService service;
 
-    // 1) 리스트 조회
+    // 1) 리스트 조회 (내 프로필만)
     @GetMapping
-    public ApiResponse list() {
-        return new ApiResponse(service.getList());
+    public ApiResponse list(@AuthenticationPrincipal UserPrincipal principal) {
+        return new ApiResponse(service.getList(principal));
     }
 
-    // 2) 프로필 생성
+    // 2) 생성
     @PostMapping
-    public ApiResponse create(@RequestBody ProfileDto dto) {
-        return new ApiResponse(service.create(dto));
+    public ApiResponse create(@RequestBody ProfileDto dto,
+                              @AuthenticationPrincipal UserPrincipal principal) {
+        return new ApiResponse(service.create(dto, principal));
     }
 
     // 3) 단건 조회
     @GetMapping("/{id}")
-    public ApiResponse get(@PathVariable Long id) {
-        return new ApiResponse(service.get(id));
+    public ApiResponse get(@PathVariable Long id,
+                           @AuthenticationPrincipal UserPrincipal principal) {
+        return new ApiResponse(service.get(id, principal));
     }
 
-    // 4) 프로필 수정
+    // 4) 수정
     @PutMapping("/{id}")
     public ApiResponse update(@PathVariable Long id,
-                              @RequestBody ProfileDto dto) {
-        return new ApiResponse(service.update(id, dto));
+                              @RequestBody ProfileDto dto,
+                              @AuthenticationPrincipal UserPrincipal principal) {
+        return new ApiResponse(service.update(id, dto, principal));
     }
 
-
-    // 5) 프로필 삭제
+    // 5) 삭제
     @DeleteMapping("/{id}")
-    public ApiResponse delete(@PathVariable Long id) {
-        service.delete(id);
+    public ApiResponse delete(@PathVariable Long id,
+                              @AuthenticationPrincipal UserPrincipal principal) {
+        service.delete(id, principal);
         return new ApiResponse(null);
     }
 }

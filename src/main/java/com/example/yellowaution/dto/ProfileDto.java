@@ -1,14 +1,15 @@
 package com.example.yellowaution.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Getter @Setter @NoArgsConstructor
+@Getter
+@Setter
 public class ProfileDto {
     private Long id;
+
     private String companyName;
     private String representative;
     private String companySize;
@@ -21,4 +22,6 @@ public class ProfileDto {
     private String homepageUrl;
     private String phone;
     private String email;
+
+    private Long userId;  // ✅ 소유자 식별을 위한 필드
 }
