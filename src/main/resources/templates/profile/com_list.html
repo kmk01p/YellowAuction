@@ -33,7 +33,7 @@
 <script>
     // 목록 불러오기
     function loadList(){
-        $.getJSON('/api/com/profile', function(res){
+        $.getJSON('/api/profile', function(res){
             const tbody = $('#profileTable tbody').empty();
             res.data.forEach(p=>{
                 $('<tr>')
@@ -51,7 +51,7 @@
                     .append(`<td>${p.email}</td>`)
                     .append(`<td>
 
-                        <button onclick="location.href='/profile/com_update?id=${p.id}'">수정</button>
+                        <button onclick="location.href='/profile/com_detail?id=${p.id}'">수정</button>
                         <button onclick="deleteProfile(${p.id})">삭제</button>
                      </td>`)
                     .appendTo(tbody);
