@@ -1,8 +1,10 @@
 package com.example.yellowaution.controller;
 
 import com.example.yellowaution.domain.Board;
+import com.example.yellowaution.domain.User;
 import com.example.yellowaution.dto.ApiResponse;
 import com.example.yellowaution.service.BoardService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +27,9 @@ public class BoardRestController {
     }
 
     @PostMapping
-    public ApiResponse create(@RequestBody Board board) {
+    public ApiResponse create(@RequestBody Board board, HttpSession session) {
+        User user = (User) session.getAttribute("loginUser");
+        board.setUser(user);
         return new ApiResponse(service.create(board));
     }
 

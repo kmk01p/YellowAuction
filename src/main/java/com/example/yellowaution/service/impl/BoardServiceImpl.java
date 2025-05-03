@@ -1,6 +1,7 @@
 package com.example.yellowaution.service.impl;
 
 import com.example.yellowaution.domain.Board;
+import com.example.yellowaution.dto.BoardDto;
 import com.example.yellowaution.repository.BoardRepository;
 import com.example.yellowaution.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,23 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository repository;
 
     @Override
-    public List<Board> findAll() {
-        return repository.findAll();
+    public List<BoardDto> findAll() {
+        return repository.findAll().stream()
+                .map(b -> new BoardDto(
+                        b.getId(),
+                        b.getTitle(),
+                        b.getDueDate(),
+                        b.getDescription(),
+                        b.getTechnologies(),
+                        b.getRecruitPeriod(),
+                        b.getStartPrice(),
+                        b.getCurrentPrice(),
+                        b.getStatus(),
+                        b.getCreatedAt(),
+                        b.getUser().getId(),
+                        b.getUser().getUsername()
+                ))
+                .toList();
     }
 
     @Override
@@ -35,6 +51,14 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Board update(Long id, Board dto) {
         Board b = getById(id);
+
+        // 작성자 일치 여부 확인
+        Long loginUserId = dto.getUser().getId();  // 전달받은 dto.user.id
+        if (!b.getUser().getId().equals(loginUserId)) {
+            throw new SecurityException("작성자만 수정할 수 있습니다.");
+        }
+
+        // 수정 적용
         b.setTitle(dto.getTitle());
         b.setDueDate(dto.getDueDate());
         b.setDescription(dto.getDescription());
@@ -44,6 +68,7 @@ public class BoardServiceImpl implements BoardService {
         b.setStatus(dto.getStatus());
         return repository.save(b);
     }
+
 
     @Override
     public void delete(Long id) {

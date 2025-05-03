@@ -1,11 +1,11 @@
 package com.example.yellowaution.service;
-
 import com.example.yellowaution.domain.Board;
+import com.example.yellowaution.dto.BoardDto;
 
 import java.util.List;
 
 public interface BoardService {
-    List<Board> findAll();
+    List<BoardDto> findAll();
     Board getById(Long id);
     Board create(Board board);
     Board update(Long id, Board board);
