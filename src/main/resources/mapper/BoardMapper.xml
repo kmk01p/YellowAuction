@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.yellowaution.mapper.BoardMapper">
+
+    <!-- 1) Technologies 조회 -->
+    <select id="selectTechnologies" parameterType="long" resultType="string">
+        SELECT technology
+        FROM board_technologies
+        WHERE board_id = #{id}
+    </select>
+
+    <!-- 2) Board 전체 필드 매핑 -->
+    <resultMap id="boardResultMap" type="com.example.yellowaution.domain.Board">
+        <id     property="id"            column="id"/>
+        <result property="title"         column="title"/>
+        <result property="dueDate"       column="due_date" javaType="java.time.LocalDate"/>
+        <result property="description"   column="description"/>
+        <result property="recruitPeriod" column="recruit_period"/>
+        <result property="startPrice"    column="start_price"/>
+        <result property="currentPrice"  column="current_price"/>
+        <result property="status"        column="status"/>
+        <result property="createdAt"     column="created_at" javaType="java.time.LocalDateTime"/>
+
+        <!-- User 연관 매핑 -->
+        <association property="user" javaType="com.example.yellowaution.domain.User">
+            <id property="id" column="user_id"/>
+        </association>
+
+        <!-- Technologies 리스트 매핑 -->
+        <collection property="technologies" ofType="java.lang.String"
+                    column="id" select="selectTechnologies"/>
+    </resultMap>
+
+    <!-- 3) 검색용 쿼리 -->
+    <select id="searchByKeyword" parameterType="hashMap" resultMap="boardResultMap">
+        SELECT DISTINCT
+        b.id,
+        b.title,
+        b.due_date,
+        b.description,
+        b.recruit_period,
+        b.start_price,
+        b.current_price,
+        b.status,
+        b.created_at,
+        b.user_id
+        FROM board b
+        LEFT JOIN board_technologies bt ON b.id = bt.board_id
+        WHERE 1=1
+        <if test="keyword != null and keyword != ''">
+            AND (
+            b.title LIKE CONCAT('%', #{keyword}, '%')
+            OR bt.technology LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+        GROUP BY b.id
+        ORDER BY b.id DESC
+    </select>
+
+    <!-- 4) 정렬용 쿼리 -->
+    <select id="sortByCriteria" parameterType="hashMap" resultMap="boardResultMap">
+        SELECT
+        b.id,
+        b.title,
+        b.due_date,
+        b.description,
+        b.recruit_period,
+        b.start_price,
+        b.current_price,
+        b.status,
+        b.created_at,
+        b.user_id
+        FROM board b
+        <choose>
+            <when test="sort == 'status'">
+                ORDER BY CASE WHEN b.status = '구인중' THEN 0 ELSE 1 END
+            </when>
+            <when test="sort == 'recent'">
+                ORDER BY b.created_at ASC
+            </when>
+            <when test="sort == 'priceAsc'">
+                ORDER BY b.start_price ASC
+            </when>
+            <otherwise>
+                ORDER BY b.id DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

@@ -56,3 +56,8 @@ external:
     # 1000 * 60 * 60 * 24 * 7 = 604800000 1?
     # 1000 * 60 * 60 * 24 * 7 * 4 = 1209600000 2?
     # 1000 * 60 * 30 = 1800000 30?
+mybatis:
+  type-aliases-package: com.example.yellowaution.domain
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true

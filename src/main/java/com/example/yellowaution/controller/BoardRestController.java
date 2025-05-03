@@ -3,11 +3,14 @@ package com.example.yellowaution.controller;
 import com.example.yellowaution.domain.Board;
 import com.example.yellowaution.domain.User;
 import com.example.yellowaution.dto.ApiResponse;
+import com.example.yellowaution.dto.BoardDto;
 import com.example.yellowaution.service.BoardService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -16,10 +19,24 @@ import java.util.Map;
 public class BoardRestController {
     private final BoardService service;
 
+    // 전체 조회
     @GetMapping
     public ApiResponse list() {
         return new ApiResponse(service.findAll());
     }
+
+    // 검색 전용
+    @GetMapping("/search")
+    public ApiResponse search(@RequestParam String keyword) {
+        return new ApiResponse(service.searchByKeyword(keyword));
+    }
+
+    // 정렬 전용
+    @GetMapping("/sort")
+    public ApiResponse sort(@RequestParam String sort) {
+        return new ApiResponse(service.sortByCriteria(sort));
+    }
+
 
     @GetMapping("/{id}")
     public ApiResponse get(@PathVariable Long id) {
@@ -53,4 +70,6 @@ public class BoardRestController {
     public ApiResponse bid(@PathVariable Long id, @RequestBody Map<String, Long> body) {
         return new ApiResponse(service.bid(id, body.getOrDefault("amount", 0L)));
     }
+
+
 }

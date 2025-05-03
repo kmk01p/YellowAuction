@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface BoardService {
     List<BoardDto> findAll();
+    List<BoardDto> searchByKeyword(String keyword);
+    List<BoardDto> sortByCriteria(String sort);
     Board getById(Long id);
     Board create(Board board);
     Board update(Long id, Board board);

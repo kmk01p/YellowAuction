@@ -1,12 +1,18 @@
 package com.example.yellowaution.dto;
 
-import lombok.Data;
+import com.example.yellowaution.domain.Board;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+
+@Getter
+@Setter
+@Builder
 public class BoardDto {
     private Long id;
     private String title;
@@ -39,4 +45,22 @@ public class BoardDto {
         this.userId = userId;
         this.username = username;
     }
+
+    public static BoardDto from(Board board) {
+        return BoardDto.builder()
+                .id(board.getId())
+                .title(board.getTitle())
+                .dueDate(board.getDueDate())
+                .description(board.getDescription())
+                .technologies(board.getTechnologies())
+                .recruitPeriod(board.getRecruitPeriod())
+                .startPrice(board.getStartPrice())
+                .currentPrice(board.getCurrentPrice())
+                .status(board.getStatus())
+                .createdAt(board.getCreatedAt())
+                .userId(board.getUser() != null ? board.getUser().getId() : null)
+                .username(board.getUser() != null ? board.getUser().getUsername() : null)
+                .build();
+    }
+
 }
