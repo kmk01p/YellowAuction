@@ -3,55 +3,103 @@
 <head>
     <title>회원가입</title>
     <meta charset="UTF-8">
-    <!-- jQuery 로드 -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        body {
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .register-card {
+            background: #ffffff;
+            padding: 2rem;
+            width: 340px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .register-card h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+        .register-card form div {
+            margin-bottom: 1rem;
+        }
+        .register-card label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        .register-card input, .register-card select {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        .register-card button {
+            width: 100%;
+            padding: 0.7rem;
+            background: #4a90e2;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .register-card button:hover {
+            background: #357ab8;
+        }
+        .register-card p {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        .register-card p a {
+            color: #4a90e2;
+            text-decoration: none;
+        }
+        .register-card p a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-<h2>회원가입</h2>
-<div id="signupError" style="color:red;"></div>
-<form id="registerForm" th:action="@{/register}" method="post">
-    <div>
-        <label>아이디:</label>
-        <input type="text" name="username" required />
-    </div>
-    <div>
-        <label>비밀번호:</label>
-        <input type="password" name="password" required />
-    </div>
+<div class="register-card">
+    <h2>회원가입</h2>
+    <form action="/register" method="post">
         <div>
-            <label>회원유형:</label>
-            <select name="userType" required>
-                <option value="">선택해주세요</option>
-                <option value="EMPLOYER">구인</option>
-                <option value="FREELANCER">구직</option>
+            <label for="username">아이디</label>
+            <input type="text" id="username" name="username" required />
+        </div>
+        <div>
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" name="password" required />
+        </div>
+        <div>
+            <label for="userType">회원 유형</label>
+            <select id="userType" name="userType" required>
+                <option value="">선택하세요</option>
+                <option value="EMPLOYER">구인자 (기업)</option>
+                <option value="FREELANCER">구직자 (프리랜서)</option>
             </select>
         </div>
-    <div>
-        <button type="submit">가입하기</button>
-    </div>
-</form>
-<p>이미 계정이 있으신가요? <a th:href="@{/login}">로그인하기</a></p>
-
-<script>
-    $(function(){
-        $('#registerForm').on('submit', function(e){
-            e.preventDefault();
-            var $form = $(this);
-            $.ajax({
-                url: $form.attr('action'),
-                type: 'POST',
-                data: $form.serialize(),
-                dataType: 'text',
-                success: function(data, status, xhr){
-                    // 가입 성공 시 로그인 페이지로
-                    window.location.href = '/login';
-                },
-                error: function(xhr){
-                    $('#signupError').text('회원가입에 실패했습니다: ' + (xhr.responseText || xhr.status));
-                }
-            });
-        });
-    });
-</script>
+        <div>
+            <button type="submit">회원가입</button>
+        </div>
+    </form>
+    <p>이미 계정이 있으신가요? <a th:href="@{/login}">로그인하기</a></p>
+</div>
 </body>
 </html>
