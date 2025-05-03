@@ -4,12 +4,16 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Getter @Setter @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Board {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,4 +41,8 @@ public class Board {
 
     @Column(nullable = false)
     private String status;  // "구인중" 또는 "마감"
+
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 }

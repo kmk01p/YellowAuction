@@ -1,105 +1,242 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
-    <title>회원가입</title>
     <meta charset="UTF-8">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>회원가입</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Daum 주소검색 API -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-        body {
-            background: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .register-card {
-            background: #ffffff;
-            padding: 2rem;
-            width: 340px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .register-card h2 {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            color: #333;
-            font-weight: 500;
-        }
-        .register-card form div {
-            margin-bottom: 1rem;
-        }
-        .register-card label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #555;
-            font-size: 0.9rem;
-        }
-        .register-card input, .register-card select {
-            width: 100%;
-            padding: 0.6rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 0.95rem;
-        }
-        .register-card button {
-            width: 100%;
-            padding: 0.7rem;
-            background: #4a90e2;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-        .register-card button:hover {
-            background: #357ab8;
-        }
-        .register-card p {
-            text-align: center;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-        }
-        .register-card p a {
-            color: #4a90e2;
-            text-decoration: none;
-        }
-        .register-card p a:hover {
-            text-decoration: underline;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Noto Sans KR',sans-serif; }
+        body { background:#f0f2f5; display:flex; justify-content:center; padding:2rem 0; }
+        .register-card { background:#fff; padding:2rem; width:400px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+        .register-card h2 { text-align:center; margin-bottom:1.5rem; color:#333; }
+        .register-card label { display:block; margin-bottom:0.5rem; color:#555; font-size:0.9rem; }
+        .register-card input, .register-card select, .register-card textarea { width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; font-size:0.95rem; }
+        .register-card button { width:100%; padding:0.7rem; background:#4a90e2; color:#fff; border:none; border-radius:4px; cursor:pointer; transition:background .2s; }
+        .register-card button:hover { background:#357ab8; }
+        .field-group { margin-bottom:1rem; }
+        .tech-option { display:inline-block; padding:4px 8px; margin:2px; border:1px solid #ccc; border-radius:4px; cursor:pointer; }
+        .tech-option.selected { background:#4a90e2; color:#fff; border-color:#4a90e2; }
     </style>
 </head>
 <body>
 <div class="register-card">
     <h2>회원가입</h2>
-    <form action="/register" method="post">
-        <div>
-            <label for="username">아이디</label>
-            <input type="text" id="username" name="username" required />
+    <form id="registerForm">
+        <!-- 공통 -->
+        <div class="field-group">
+            <label>아이디</label>
+            <input type="text" id="username" required>
         </div>
-        <div>
-            <label for="password">비밀번호</label>
-            <input type="password" id="password" name="password" required />
+        <div class="field-group">
+            <label>비밀번호</label>
+            <input type="password" id="password" required>
         </div>
-        <div>
-            <label for="userType">회원 유형</label>
-            <select id="userType" name="userType" required>
+        <div class="field-group">
+            <label>회원 유형</label>
+            <select id="userType" required>
                 <option value="">선택하세요</option>
                 <option value="EMPLOYER">구인자 (기업)</option>
                 <option value="FREELANCER">구직자 (프리랜서)</option>
             </select>
         </div>
-        <div>
+        <div class="field-group">
+            <label>이름</label>
+            <input type="text" id="name" required>
+        </div>
+        <div class="field-group">
+            <label>전화번호</label>
+            <input type="tel" id="phone" required>
+        </div>
+        <!-- 이메일 -->
+        <div class="field-group">
+            <label>이메일</label>
+            <div style="display:flex;">
+                <input type="text" id="emailUser" placeholder="아이디" style="flex:1;">
+                <span style="padding:0.6rem;">@</span>
+                <select id="emailDomain" style="flex:1;">
+                    <option value="gmail.com">gmail.com</option>
+                    <option value="naver.com">naver.com</option>
+                    <option value="daum.net">daum.net</option>
+                    <option value="custom">직접입력</option>
+                </select>
+            </div>
+            <input type="text" id="emailDomainCustom" placeholder="도메인 직접입력" style="display:none; margin-top:0.5rem;">
+        </div>
+        <!-- 주소 -->
+        <div class="field-group">
+            <label>주소</label>
+            <input type="text" id="address" readonly placeholder="클릭하여 주소 검색">
+        </div>
+        <!-- 상세 주소 -->
+        <div class="field-group">
+            <label>상세 주소</label>
+            <input type="text" id="addressDetail" placeholder="상세 주소를 입력하세요">
+        </div>
+
+        <!-- 기업 전용 -->
+        <div id="employerFields" style="display:none;">
+            <div class="field-group">
+                <label>대표자명</label>
+                <input type="text" id="representative">
+            </div>
+            <div class="field-group">
+                <label>기업 규모</label>
+                <select id="companySize">
+                    <option value="">선택하세요</option>
+                    <option value="스타트업">스타트업</option>
+                    <option value="중소기업">중소기업</option>
+                    <option value="중견기업">중견기업</option>
+                    <option value="대기업">대기업</option>
+                </select>
+            </div>
+            <div class="field-group">
+                <label>설립일</label>
+                <input type="date" id="establishedDate">
+            </div>
+            <div class="field-group">
+                <label>주요업종</label>
+                <input type="text" id="mainIndustry">
+            </div>
+            <div class="field-group">
+                <label>사원수</label>
+                <input type="number" id="employees">
+            </div>
+            <div class="field-group">
+                <label>자본금</label>
+                <input type="number" id="capital">
+            </div>
+            <div class="field-group">
+                <label>연 매출</label>
+                <input type="number" id="annualRevenue">
+            </div>
+            <div class="field-group">
+                <label>홈페이지 URL</label>
+                <input type="text" id="homepageUrl">
+            </div>
+        </div>
+
+        <!-- 프리랜서 전용 -->
+        <div id="freelancerFields" style="display:none;">
+            <div class="field-group">
+                <label>희망 직무</label>
+                <input type="text" id="jobType">
+            </div>
+            <div class="field-group">
+                <label>경력</label>
+                <input type="text" id="career" placeholder="예: 신입, 3년차">
+            </div>
+            <div class="field-group">
+                <label>사용 기술 (클릭하여 선택/해제)</label>
+                <div id="techOptions">
+                    <span class="tech-option">Java</span><span class="tech-option">Javascript</span>
+                    <span class="tech-option">MySQL</span><span class="tech-option">PHP</span>
+                    <span class="tech-option">계획성</span><span class="tech-option">Jquery</span>
+                    <span class="tech-option">React</span><span class="tech-option">Git</span>
+                    <span class="tech-option">HTML</span><span class="tech-option">고객응대</span>
+                    <span class="tech-option">CSS</span><span class="tech-option">RDBMS</span>
+                    <span class="tech-option">MyBatis</span><span class="tech-option">SQL</span>
+                    <span class="tech-option">공감능력</span><span class="tech-option">JPA</span>
+                    <span class="tech-option">전자정보표준프레임워크</span><span class="tech-option">MariaDB</span>
+                    <span class="tech-option">TypeScript</span><span class="tech-option">고객지향성</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:1rem;">
             <button type="submit">회원가입</button>
         </div>
     </form>
-    <p>이미 계정이 있으신가요? <a th:href="@{/login}">로그인하기</a></p>
 </div>
+
+<script>
+    $(function(){
+        // 직군별 필드 토글
+        $('#userType').change(function(){
+            $('#employerFields').toggle(this.value==='EMPLOYER');
+            $('#freelancerFields').toggle(this.value==='FREELANCER');
+        });
+
+        // 이메일 도메인 직접입력 토글
+        $('#emailDomain').change(function(){
+            $('#emailDomainCustom').toggle(this.value==='custom');
+        });
+
+        // Daum 주소검색
+        $('#address').on('click', function(){
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    $('#address').val(data.roadAddress||data.jibunAddress);
+                }
+            }).open();
+        });
+
+        // 기술 스택 선택
+        $('#techOptions').on('click', '.tech-option', function(){
+            $(this).toggleClass('selected');
+        });
+
+        // 폼 제출 처리 (JSON)
+        $('#registerForm').submit(function(e){
+            e.preventDefault();
+            const userType = $('#userType').val();
+            const domain = $('#emailDomain').val()==='custom'
+                ? $('#emailDomainCustom').val()
+                : $('#emailDomain').val();
+            const email = $('#emailUser').val()+'@'+domain;
+
+            const data = {
+                username: $('#username').val(),
+                password: $('#password').val(),
+                role: 'ROLE_USER',
+                userType: userType,
+                profile: {
+                    name: $('#name').val(),
+                    phone: $('#phone').val(),
+                    email: email,
+                    address: $('#address').val(),
+                    addressDetail: $('#addressDetail').val()  // 추가된 상세 주소
+                }
+            };
+
+            if(userType==='EMPLOYER'){
+                Object.assign(data.profile,{
+                    representative: $('#representative').val(),
+                    companySize: $('#companySize').val(),
+                    establishedDate: $('#establishedDate').val(),
+                    mainIndustry: $('#mainIndustry').val(),
+                    employees: parseInt($('#employees').val()||0),
+                    capital: parseInt($('#capital').val()||0),
+                    annualRevenue: parseInt($('#annualRevenue').val()||0),
+                    homepageUrl: $('#homepageUrl').val()
+                });
+            }
+            if(userType==='FREELANCER'){
+                const techs = $('#techOptions .tech-option.selected')
+                    .map(function(){return $(this).text();}).get();
+                Object.assign(data.profile,{
+                    jobType: $('#jobType').val(),
+                    career: $('#career').val(),
+                    techStack: techs
+                });
+            }
+
+            $.ajax({
+                url:'/api/auth/register',
+                type:'POST',
+                contentType:'application/json',
+                data:JSON.stringify(data),
+                success:function(){
+                    alert('회원가입 성공');
+                    location.href='/login';
+                },
+                error:function(){
+                    alert('회원가입 실패');
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

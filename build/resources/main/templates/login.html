@@ -1,80 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>로그인</title>
     <meta charset="UTF-8">
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-        body {
-            background: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .login-card {
-            background: #ffffff;
-            padding: 2rem;
-            width: 320px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .login-card h2 {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            color: #333;
-            font-weight: 500;
-        }
-        .login-card form div {
-            margin-bottom: 1rem;
-        }
-        .login-card label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #555;
-            font-size: 0.9rem;
-        }
-        .login-card input {
-            width: 100%;
-            padding: 0.6rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 0.95rem;
-        }
-        .login-card button {
-            width: 100%;
-            padding: 0.7rem;
-            background: #4a90e2;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-        .login-card button:hover {
-            background: #357ab8;
-        }
-        .login-card p {
-            text-align: center;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-        }
-        .login-card p a {
-            color: #4a90e2;
-            text-decoration: none;
-        }
-        .login-card p a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <title>로그인</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="login-card">
@@ -82,14 +11,17 @@
     <form action="/login" method="post">
         <div>
             <label for="username">아이디</label>
-            <input type="text" name="username" id="username" required />
+            <input type="text"    id="username" name="username" required />
         </div>
         <div>
             <label for="password">비밀번호</label>
-            <input type="password" name="password" id="password" required />
+            <input type="password" id="password" name="password" required />
         </div>
         <div>
             <button type="submit">로그인</button>
+        </div>
+        <div th:if="${loginError}" style="color:red;">
+            [[${loginError}]]
         </div>
     </form>
     <p>계정이 없으신가요? <a th:href="@{/register}">회원가입하기</a></p>

@@ -15,18 +15,7 @@ public class YellowAutionApplication {
         SpringApplication.run(YellowAutionApplication.class, args);
     }
 
-    @Bean
-    CommandLineRunner initAdmin(UserRepository repo) {
-        return args -> {
-            if (repo.findByUsername("admin").isEmpty()) {
-                User admin = new User();
-                admin.setUsername("admin");
-                admin.setPassword("1234");
-                admin.setRole("ADMIN");
-                admin.setUserType("ADMIN");
-                repo.save(admin);
-            }
-        };
-    }
+
 }
+
 

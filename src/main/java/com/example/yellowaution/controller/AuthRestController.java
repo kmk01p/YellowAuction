@@ -17,15 +17,16 @@ public class AuthRestController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest req) {
+    public ResponseEntity<ApiResponse> register(@RequestBody UserRegisterDto dto) {
         try {
-            userService.register(req.getUsername(), req.getPassword(), req.getUserType());
+            userService.register(dto); // 전체 DTO 전달
             return ResponseEntity.ok(new ApiResponse(true, "회원가입 성공"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new ApiResponse(false, e.getMessage()));
         }
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest req, HttpSession session) {
@@ -48,4 +49,20 @@ public class AuthRestController {
         session.invalidate();
         return ResponseEntity.ok(new ApiResponse(true, "로그아웃 되었습니다."));
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(HttpSession session) {
+        User user = (User) session.getAttribute("loginUser");
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ApiResponse(false, "로그인 필요"));
+        }
+
+        UserDto dto = new UserDto(
+                user.getId(), user.getUsername(),
+                user.getRole(), user.getUserType()
+        );
+        return ResponseEntity.ok(dto);
+    }
+
 }

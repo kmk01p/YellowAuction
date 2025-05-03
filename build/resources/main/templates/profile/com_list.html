@@ -8,7 +8,6 @@
 </head>
 <body>
 <h2>회사 프로필 목록</h2>
-<button onclick="location.href='/profile/com_create.html'">새 회사 등록</button>
 <table border="1" id="profileTable" style="margin-top:10px; width:100%;">
     <thead>
     <tr>
@@ -31,11 +30,13 @@
 </table>
 
 <script>
+    $(document).ready(loadList);
+
     // 목록 불러오기
-    function loadList(){
-        $.getJSON('/api/profile', function(res){
+    function loadList() {
+        $.getJSON('/api/profile', function (res) {
             const tbody = $('#profileTable tbody').empty();
-            res.data.forEach(p=>{
+            res.data.forEach(p => {
                 $('<tr>')
                     .append(`<td>${p.name}</td>`)
                     .append(`<td>${p.representative}</td>`)
@@ -52,25 +53,12 @@
                     .append(`<td>
 
                         <button onclick="location.href='/profile/com_detail?id=${p.id}'">수정</button>
-                        <button onclick="deleteProfile(${p.id})">삭제</button>
                      </td>`)
                     .appendTo(tbody);
             });
         });
     }
 
-    // 삭제
-    function deleteProfile(id){
-        if(confirm('정말 삭제하시겠습니까?')){
-            $.ajax({
-                url: `/api/com/profile/${id}`,
-                method: 'DELETE',
-                success: loadList
-            });
-        }
-    }
-
-    $(document).ready(loadList);
 </script>
 </body>
 </html>

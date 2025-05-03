@@ -7,7 +7,6 @@
 </head>
 <body>
 <h2>개인 프로필 목록</h2>
-<button onclick="location.href='/profile/free_create.html'">새 프로필 등록</button>
 
 <table border="1" id="profileTable" style="margin-top:10px; width:100%;">
     <thead>
@@ -38,26 +37,10 @@
                     .append(`<td>${p.career}</td>`)
                     .append(`<td>${p.techStack}</td>`)
                     .append(`<td>
-                        <button onclick="location.href='/profile/free_detail.html?id=${p.id}'">수정</button>
-                        <button onclick="deleteProfile(${p.id})">삭제</button>
-                     </td>`)
+                        <button onclick="location.href='/profile/free_detail.html?id=${p.id}'">수정</button>                     </td>`)
                     .appendTo(tbody);
             });
         });
-    }
-
-    // 삭제
-    function deleteProfile(id){
-        if(confirm('정말 삭제하시겠습니까?')){
-            $.ajax({
-                url: `/api/profile/${id}`,
-                method: 'DELETE',
-                success: loadList,
-                error: function(xhr){
-                    alert('삭제 중 오류: ' + xhr.responseText);
-                }
-            });
-        }
     }
 
     $(document).ready(loadList);

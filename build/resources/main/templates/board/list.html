@@ -1,4 +1,3 @@
-<!-- src/main/resources/static/board/list.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,50 +27,75 @@
 </table>
 
 <script>
-    let projects = [], sortAsc = {};
+    let projects = [], sortAsc = {}, userType = null;
 
-    function loadList(){
+    function loadUserType(callback) {
+        $.getJSON('/api/auth/me', function(res) {
+            userType = res.userType;  // ✅ 대소문자 그대로 유지 (예: "EMPLOYER", "FREELANCER")
+            callback();
+        }).fail(() => {
+            alert("로그인이 필요합니다.");
+            location.href = "/login";
+        });
+    }
+
+    function loadList() {
         $.getJSON('/api/board', res => {
             projects = res.data;
             renderTable(projects);
         });
     }
 
-    function renderTable(list){
+    function isExpired(createdAt, period) {
+        const created = new Date(createdAt);
+        const deadline = new Date(created.getTime() + period * 24 * 60 * 60 * 1000);
+        return new Date() > deadline;
+    }
+
+    function renderTable(list) {
         const tbody = $('#projectTable tbody').empty();
-        list.forEach(p=>{
-            $('<tr>')
-                .append(`<td><a href="/board/com_detail.html?id=${p.id}">${p.title}</a></td>`)
-                .append(`<td>${p.startPrice.toLocaleString()}</td>`)
-                .append(`<td>${p.technologies.join(', ')}</td>`)
-                .append(`<td>${p.status}</td>`)
-                .append(`<td>${p.dueDate}</td>`)
-                .append(`<td>${p.recruitPeriod}일</td>`)
-                .append(`
-                  <td>
-                    <button onclick="location.href='/board/com_detail/${p.id}'">수정</button>
-                    <button onclick="location.href='/board/free_detail/${p.id}'">입찰</button>
-                  </td>
-                `)
-                .appendTo(tbody);
+        list.forEach(p => {
+            const expired = isExpired(p.createdAt, p.recruitPeriod);
+
+            const tr = $('<tr>');
+            tr.append(`<td><a href="/board/com_detail.html?id=${p.id}">${p.title}</a></td>`);
+            tr.append(`<td>${p.startPrice.toLocaleString()}</td>`);
+            tr.append(`<td>${p.technologies.join(', ')}</td>`);
+            tr.append(`<td>${p.status}</td>`);
+            tr.append(`<td>${p.dueDate}</td>`);
+            tr.append(`<td>${p.recruitPeriod}일</td>`);
+
+            const actions = $('<td>');
+            if (userType === 'FREELANCER') {
+                actions.append(`<button ${expired ? 'disabled' : ''} onclick="location.href='/board/free_detail/${p.id}'">입찰</button>`);
+                actions.append(`<button disabled>수정</button>`);
+            } else if (userType === 'EMPLOYER') {
+                actions.append(`<button ${expired ? 'disabled' : ''} onclick="location.href='/board/com_detail/${p.id}'">수정</button>`);
+                actions.append(`<button disabled>입찰</button>`);
+            } else {
+                actions.append(`<button disabled>입찰</button>`);
+                actions.append(`<button disabled>수정</button>`);
+            }
+
+            tr.append(actions).appendTo(tbody);
         });
     }
 
-    // 컬럼 헤더 클릭 정렬
-    $('.sortable').click(function(){
+    $('.sortable').click(function () {
         const key = $(this).data('key');
         sortAsc[key] = !sortAsc[key];
-        const sorted = projects.slice().sort((a,b)=>{
+        const sorted = projects.slice().sort((a, b) => {
             let va = a[key], vb = b[key];
-            // 기술은 문자열 길이로 정렬 (예시)
-            if(Array.isArray(va)) va = va.join(', ');
-            if(Array.isArray(vb)) vb = vb.join(', ');
-            return va>vb ? (sortAsc[key]?1:-1) : va<vb ? (sortAsc[key]?-1:1) : 0;
+            if (Array.isArray(va)) va = va.join(', ');
+            if (Array.isArray(vb)) vb = vb.join(', ');
+            return va > vb ? (sortAsc[key] ? 1 : -1) : va < vb ? (sortAsc[key] ? -1 : 1) : 0;
         });
         renderTable(sorted);
     });
 
-    $(document).ready(loadList);
+    $(document).ready(() => {
+        loadUserType(loadList);
+    });
 </script>
 </body>
 </html>
