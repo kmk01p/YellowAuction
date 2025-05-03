@@ -1,47 +1,147 @@
-<!-- src/main/resources/static/board/com_detail.html -->
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>프로젝트 상세(기업)</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>프로젝트 상세 (기업용)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fdfaf1;
+            font-family: 'Pretendard', sans-serif;
+        }
+        .main-card {
+            max-width: 800px;
+            margin: 60px auto;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            background: #ffffff;
+        }
+        .header {
+            font-weight: 700;
+            color: #333;
+        }
+        .highlight {
+            color: #f9c846;
+        }
+        .btn-gold {
+            background-color: #f9c846;
+            border: none;
+            color: black;
+        }
+        .btn-gold:hover {
+            background-color: #f6b700;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-<h2>프로젝트 상세 (기업용)</h2>
-<input type="hidden" id="projId">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #fff7dd;">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="/">YellowAuction</a>
 
-<div>
-    <label>프로젝트명:</label><br>
-    <input type="text" id="title"><br>
-    <label>Due Day:</label><br>
-    <input type="date" id="dueDate"><br>
-    <label>내용:</label><br>
-    <textarea id="description"></textarea><br>
-    <label>사용 기술:</label><br>
-    <input type="text" id="technologies"><br>
-    <label>구인 기간:</label><br>
-    <input type="number" id="recruitPeriod"><br>
-    <label>초기 경매 금액:</label><br>
-    <input type="number" id="startPrice"><br>
-    <label>구인 상태:</label><br>
-    <select id="status">
-        <option value="구인중">구인중</option>
-        <option value="마감">마감</option>
-    </select><br><br>
+        <div class="collapse navbar-collapse justify-content-end">
+            <ul class="navbar-nav">
 
-    <button id="saveBtn">수정 저장</button>
-    <button id="closeBtn">조기 마감</button>
-    <button onclick="history.back()">목록</button>
+                <!-- 🔸 로그인한 경우 -->
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 홈 -->
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
+                       th:href="@{/dashboard/com_dashboard.html}">🏠 홈</a>
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
+                       th:href="@{/dashboard/free_dashboard.html}">🏠 홈</a>
+                </li>
+
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 마이페이지 -->
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
+                       th:href="@{/profile/com_list.html}">📂 마이페이지</a>
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
+                       th:href="@{/profile/free_list.html}">📂 마이페이지</a>
+                </li>
+
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 경매 목록 -->
+                    <a class="nav-link" th:href="@{/board/list.html}">📋 경매 목록</a>
+                </li>
+
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 로그아웃 -->
+                    <a class="nav-link" th:href="@{/logout}">🔓 로그아웃</a>
+                </li>
+
+                <!-- 🔹 비로그인 상태 -->
+                <li class="nav-item" th:if="${session.loginUser == null}">
+                    <a class="nav-link" th:href="@{/login}">🔑 로그인</a>
+                </li>
+                <li class="nav-item" th:if="${session.loginUser == null}">
+                    <a class="nav-link" th:href="@{/register}">📝 회원가입</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card main-card p-5">
+        <h2 class="text-center header mb-4">🛠️ <span class="highlight">프로젝트 상세 수정</span></h2>
+        <input type="hidden" id="projId">
+
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="title" placeholder="프로젝트명">
+            <label for="title">프로젝트명</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="date" class="form-control" id="dueDate" placeholder="마감일">
+            <label for="dueDate">마감일</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <textarea class="form-control" id="description" placeholder="내용" style="height: 100px;"></textarea>
+            <label for="description">내용</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="technologies" placeholder="사용 기술">
+            <label for="technologies">사용 기술 (콤마로 구분)</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="number" class="form-control" id="recruitPeriod" placeholder="구인 기간">
+            <label for="recruitPeriod">구인 기간 (일)</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="number" class="form-control" id="startPrice" placeholder="시작가">
+            <label for="startPrice">초기 경매 금액 (₩)</label>
+        </div>
+
+        <div class="form-floating mb-4">
+            <select class="form-select" id="status">
+                <option value="구인중">구인중</option>
+                <option value="마감">마감</option>
+            </select>
+            <label for="status">구인 상태</label>
+        </div>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <button class="btn btn-gold px-4" id="saveBtn">수정 저장</button>
+            <button class="btn btn-outline-secondary px-4" id="closeBtn">조기 마감</button>
+            <button class="btn btn-outline-dark px-4" onclick="history.back()">목록</button>
+        </div>
+    </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     const segments = window.location.pathname.split('/');
     const id = segments[segments.length - 1];
 
     $('#projId').val(id);
 
-    function loadDetail(){
-        $.getJSON(`/api/board/${id}`, res=>{
+    function loadDetail() {
+        $.getJSON(`/api/board/${id}`, res => {
             const p = res.data;
             $('#title').val(p.title);
             $('#dueDate').val(p.dueDate);
@@ -53,43 +153,47 @@
         });
     }
 
-    $('#saveBtn').click(()=>{
+    $('#saveBtn').click(() => {
         const dto = {
             title: $('#title').val(),
             dueDate: $('#dueDate').val(),
             description: $('#description').val(),
             technologies: $('#technologies').val().split(','),
-            recruitPeriod: parseInt($('#recruitPeriod').val(),10),
-            startPrice: parseInt($('#startPrice').val(),10),
+            recruitPeriod: parseInt($('#recruitPeriod').val(), 10),
+            startPrice: parseInt($('#startPrice').val(), 10),
             status: $('#status').val()
         };
+
         $.ajax({
             url: `/api/board/${id}`,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(dto),
-            success: ()=> {
+            success: () => {
                 alert('수정 완료');
                 location.href = '/board/list';
             },
-            error: xhr=> alert('수정 실패: '+xhr.responseText)
+            error: xhr => {
+                alert('수정 실패: ' + xhr.responseText);
+            }
         });
     });
 
-    $('#closeBtn').click(()=>{
+    $('#closeBtn').click(() => {
         $.ajax({
             url: `/api/board/${id}/close`,
             method: 'PUT',
-            success: ()=> {
+            success: () => {
                 $('#status').val('마감');
                 alert('조기 마감되었습니다');
                 location.href = '/board/list';
-                },
-            error: xhr=> alert('조기 마감 실패: '+xhr.responseText)
+            },
+            error: xhr => alert('조기 마감 실패: ' + xhr.responseText)
         });
     });
 
     $(document).ready(loadDetail);
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,192 +1,210 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>프로젝트 등록</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>프리랜서 경매 등록</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* 기술 스택 옵션 스타일 */
-        #techOptions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
+        body {
+            background-color: #fdfaf1;
+            font-family: 'Pretendard', sans-serif;
+        }
+        .main-card {
+            max-width: 800px;
+            margin: 60px auto;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            background: #ffffff;
+        }
+        .header {
+            font-weight: 700;
+            color: #333;
+        }
+        .highlight {
+            color: #f9c846;
         }
         .tech-option {
-            position: relative;
-            padding: 6px 12px 6px 20px;
-            border: 1px solid #ccc;
-            border-radius: 16px;
+            padding: 8px 16px;
+            border-radius: 30px;
+            margin: 4px;
+            border: 1px solid #f9c846;
             color: #555;
-            font-size: 14px;
+            background-color: #fffbea;
             cursor: pointer;
-            user-select: none;
+            transition: 0.2s;
         }
-        .tech-option::before {
-            content: '+';
-            position: absolute;
-            left: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #aaa;
-            font-weight: bold;
+        .tech-option:hover {
+            background-color: #f9c846;
+            color: #fff;
         }
         .tech-option.selected {
-            border-color: #4f79ff;
-            background-color: rgba(79,121,255,0.1);
-            color: #4f79ff;
+            background-color: #f9c846;
+            color: #fff;
+            font-weight: 600;
         }
-        .tech-option.selected::before {
-            content: '✔';
-            color: #4f79ff;
+        .btn-gold {
+            background-color: #f9c846;
+            border: none;
+            color: black;
         }
-        .field-group {
-            margin-bottom: 12px;
-        }
-        label {
-            display: block;
-            margin-bottom: 4px;
-            font-weight: bold;
-        }
-        input[type="text"],
-        input[type="date"],
-        input[type="number"],
-        textarea,
-        select {
-            width: 300px;
-            padding: 6px;
-            font-size: 14px;
-            margin-bottom: 6px;
-        }
-        textarea {
-            height: 80px;
-            resize: vertical;
-        }
-        button {
-            padding: 6px 12px;
-            font-size: 14px;
-            margin-right: 8px;
-            cursor: pointer;
+        .btn-gold:hover {
+            background-color: #f6b700;
+            color: white;
         }
     </style>
 </head>
 <body>
-<h2>프로젝트 등록</h2>
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #fff7dd;">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="/">YellowAuction</a>
 
-<div class="field-group">
-    <label>프로젝트명:</label>
-    <input type="text" id="title" required>
-</div>
+        <div class="collapse navbar-collapse justify-content-end">
+            <ul class="navbar-nav">
 
-<div class="field-group">
-    <label>프로젝트 내용:</label>
-    <textarea id="description" required></textarea>
-</div>
+                <!-- 🔸 로그인한 경우 -->
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 홈 -->
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
+                       th:href="@{/dashboard/com_dashboard.html}">🏠 홈</a>
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
+                       th:href="@{/dashboard/free_dashboard.html}">🏠 홈</a>
+                </li>
 
-<div class="field-group">
-    <label>사용 기술 (클릭하여 선택/해제):</label>
-    <div id="techOptions">
-        <span class="tech-option">Java</span>
-        <span class="tech-option">Javascript</span>
-        <span class="tech-option">MySQL</span>
-        <span class="tech-option">PHP</span>
-        <span class="tech-option">계획성</span>
-        <span class="tech-option">Jquery</span>
-        <span class="tech-option">React</span>
-        <span class="tech-option">Git</span>
-        <span class="tech-option">HTML</span>
-        <span class="tech-option">고객응대</span>
-        <span class="tech-option">CSS</span>
-        <span class="tech-option">RDBMS</span>
-        <span class="tech-option">MyBatis</span>
-        <span class="tech-option">SQL</span>
-        <span class="tech-option">공감능력</span>
-        <span class="tech-option">JPA</span>
-        <span class="tech-option">전자정보표준프레임워크</span>
-        <span class="tech-option">MariaDB</span>
-        <span class="tech-option">TypeScript</span>
-        <span class="tech-option">고객지향성</span>
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 마이페이지 -->
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
+                       th:href="@{/profile/com_list.html}">📂 마이페이지</a>
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
+                       th:href="@{/profile/free_list.html}">📂 마이페이지</a>
+                </li>
+
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 경매 목록 -->
+                    <a class="nav-link" th:href="@{/board/list.html}">📋 경매 목록</a>
+                </li>
+
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 로그아웃 -->
+                    <a class="nav-link" th:href="@{/logout}">🔓 로그아웃</a>
+                </li>
+
+                <!-- 🔹 비로그인 상태 -->
+                <li class="nav-item" th:if="${session.loginUser == null}">
+                    <a class="nav-link" th:href="@{/login}">🔑 로그인</a>
+                </li>
+                <li class="nav-item" th:if="${session.loginUser == null}">
+                    <a class="nav-link" th:href="@{/register}">📝 회원가입</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card main-card p-5">
+        <h2 class="text-center header mb-4">🚀 <span class="highlight">프로젝트 경매 등록</span></h2>
+
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="title" placeholder="프로젝트명">
+            <label for="title">프로젝트명</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <textarea class="form-control" placeholder="설명을 입력하세요" id="description" style="height: 100px;"></textarea>
+            <label for="description">설명</label>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">사용 기술 (선택)</label>
+            <div id="techOptions" class="d-flex flex-wrap">
+                <span class="tech-option">Java</span>
+                <span class="tech-option">Spring Boot</span>
+                <span class="tech-option">MySQL</span>
+                <span class="tech-option">React</span>
+                <span class="tech-option">HTML</span>
+                <span class="tech-option">CSS</span>
+                <span class="tech-option">JPA</span>
+            </div>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="number" class="form-control" id="recruitPeriod" placeholder="구인 기간">
+            <label for="recruitPeriod">구인 기간 (일)</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="date" class="form-control" id="dueDate" readonly placeholder="마감일">
+            <label for="dueDate">구인 마감일</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="number" class="form-control" id="startPrice" placeholder="경매 시작가">
+            <label for="startPrice">초기 경매 금액 (₩)</label>
+        </div>
+
+        <div class="form-floating mb-4">
+            <select class="form-select" id="status">
+                <option selected value="구인중">구인중</option>
+                <option value="마감">마감</option>
+            </select>
+            <label for="status">구인 상태</label>
+        </div>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <button class="btn btn-gold px-4" id="saveBtn">등록</button>
+            <button class="btn btn-outline-secondary px-4" onclick="history.back()">취소</button>
+        </div>
     </div>
 </div>
 
-<div class="field-group">
-    <label>구인 기간(일):</label>
-    <input type="number" id="recruitPeriod" required>
-</div>
-
-<div class="field-group">
-    <label>구인 마감일:</label>
-    <input type="date" id="dueDate" readonly>
-</div>
-
-<div class="field-group">
-    <label>초기 경매 금액(₩):</label>
-    <input type="number" id="startPrice" required>
-</div>
-
-<div class="field-group">
-    <label>구인 상태:</label>
-    <select id="status">
-        <option value="구인중" selected>구인중</option>
-        <option value="마감">마감</option>
-    </select>
-</div>
-
-<button id="saveBtn">저장</button>
-<button onclick="history.back()">취소</button>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function(){
-        // 기술 옵션 클릭 시 선택 토글
-        $('#techOptions').on('click', '.tech-option', function(){
-            $(this).toggleClass('selected');
-        });
+    $('#techOptions').on('click', '.tech-option', function () {
+        $(this).toggleClass('selected');
+    });
 
-        // 구인 기간이 입력되면 마감일 자동 계산
-        $('#recruitPeriod').on('input', function(){
-            const period = parseInt($(this).val(), 10);
-            if (!isNaN(period) && period > 0) {
-                const today = new Date();
-                today.setDate(today.getDate() + period);
-                const yyyy = today.getFullYear();
-                const mm = String(today.getMonth() + 1).padStart(2, '0');
-                const dd = String(today.getDate()).padStart(2, '0');
-                $('#dueDate').val(`${yyyy}-${mm}-${dd}`);
-            } else {
-                $('#dueDate').val('');
+    $('#recruitPeriod').on('input', function () {
+        const days = parseInt($(this).val(), 10);
+        if (!isNaN(days) && days > 0) {
+            const today = new Date();
+            today.setDate(today.getDate() + days);
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            $('#dueDate').val(`${yyyy}-${mm}-${dd}`);
+        } else {
+            $('#dueDate').val('');
+        }
+    });
+
+    $('#saveBtn').click(function () {
+        const techs = $('#techOptions .tech-option.selected').map((_, el) => $(el).text()).get();
+        const dto = {
+            title: $('#title').val(),
+            description: $('#description').val(),
+            technologies: techs,
+            recruitPeriod: parseInt($('#recruitPeriod').val(), 10),
+            dueDate: $('#dueDate').val(),
+            startPrice: parseInt($('#startPrice').val(), 10),
+            status: $('#status').val()
+        };
+
+        $.ajax({
+            url: '/api/board',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(dto),
+            success: () => {
+                alert('등록 완료!');
+                location.href = '/board/list.html';
+            },
+            error: xhr => {
+                alert('등록 실패: ' + xhr.responseText);
             }
-        });
-
-        // 저장 버튼 클릭 시 제출
-        $('#saveBtn').click(function(){
-            const techs = $('#techOptions .tech-option.selected')
-                .map((_, el) => $(el).text().trim())
-                .get();
-
-            const dto = {
-                title: $('#title').val(),
-                dueDate: $('#dueDate').val(),
-                description: $('#description').val(),
-                technologies: techs,
-                recruitPeriod: parseInt($('#recruitPeriod').val(), 10),
-                startPrice: parseInt($('#startPrice').val(), 10),
-                status: $('#status').val()
-            };
-
-            $.ajax({
-                url: '/api/board',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(dto),
-                success: function(){
-                    location.href = '/board/list.html';
-                },
-                error: function(xhr){
-                    alert('등록 실패: ' + xhr.responseText);
-                }
-            });
         });
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

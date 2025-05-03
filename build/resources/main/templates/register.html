@@ -3,188 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Daum 주소검색 API -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Noto Sans KR',sans-serif; }
-        body { background:#f0f2f5; display:flex; justify-content:center; padding:2rem 0; }
-        .register-card { background:#fff; padding:2rem; width:400px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
-        .register-card h2 { text-align:center; margin-bottom:1.5rem; color:#333; }
-        .register-card label { display:block; margin-bottom:0.5rem; color:#555; font-size:0.9rem; }
-        .register-card input, .register-card select, .register-card textarea { width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; font-size:0.95rem; }
-        .register-card button { width:100%; padding:0.7rem; background:#4a90e2; color:#fff; border:none; border-radius:4px; cursor:pointer; transition:background .2s; }
-        .register-card button:hover { background:#357ab8; }
-        .field-group { margin-bottom:1rem; }
-        .tech-option { display:inline-block; padding:4px 8px; margin:2px; border:1px solid #ccc; border-radius:4px; cursor:pointer; }
-        .tech-option.selected { background:#4a90e2; color:#fff; border-color:#4a90e2; }
+        body {
+            background-color: #fdfaf1;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .register-card {
+            max-width: 720px;
+            margin: 60px auto;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+        }
+        .btn-gold {
+            background-color: #f9c846;
+            border: none;
+            color: black;
+        }
+        .btn-gold:hover {
+            background-color: #f6b700;
+            color: white;
+        }
+        .tech-option {
+            display: inline-block;
+            padding: 6px 12px;
+            margin: 4px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .tech-option.selected {
+            background-color: #f9c846;
+            border-color: #f9c846;
+            color: black;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #fff7dd;">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="/">YellowAuction</a>
+
+        <div class="collapse navbar-collapse justify-content-end">
+            <ul class="navbar-nav">
+
+                <!-- 🔸 로그인한 경우 -->
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 홈 -->
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
+                       th:href="@{/dashboard/com_dashboard.html}">🏠 홈</a>
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
+                       th:href="@{/dashboard/free_dashboard.html}">🏠 홈</a>
+                </li>
+
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 마이페이지 -->
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
+                       th:href="@{/profile/com_list.html}">📂 마이페이지</a>
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
+                       th:href="@{/profile/free_list.html}">📂 마이페이지</a>
+                </li>
+
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 경매 목록 -->
+                    <a class="nav-link" th:href="@{/board/list.html}">📋 경매 목록</a>
+                </li>
+
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 로그아웃 -->
+                    <a class="nav-link" th:href="@{/logout}">🔓 로그아웃</a>
+                </li>
+
+                <!-- 🔹 비로그인 상태 -->
+                <li class="nav-item" th:if="${session.loginUser == null}">
+                    <a class="nav-link" th:href="@{/login}">🔑 로그인</a>
+                </li>
+                <li class="nav-item" th:if="${session.loginUser == null}">
+                    <a class="nav-link" th:href="@{/register}">📝 회원가입</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
 <div class="register-card">
-    <h2>회원가입</h2>
+    <h2 class="text-center fw-bold mb-4">📝 회원가입</h2>
     <form id="registerForm">
-        <!-- 공통 -->
-        <div class="field-group">
-            <label>아이디</label>
-            <input type="text" id="username" required>
-        </div>
-        <div class="field-group">
-            <label>비밀번호</label>
-            <input type="password" id="password" required>
-        </div>
-        <div class="field-group">
-            <label>회원 유형</label>
-            <select id="userType" required>
-                <option value="">선택하세요</option>
-                <option value="EMPLOYER">구인자 (기업)</option>
-                <option value="FREELANCER">구직자 (프리랜서)</option>
-            </select>
-        </div>
-        <div class="field-group">
-            <label>이름</label>
-            <input type="text" id="name" required>
-        </div>
-        <div class="field-group">
-            <label>전화번호</label>
-            <input type="tel" id="phone" required>
-        </div>
-        <!-- 이메일 -->
-        <div class="field-group">
-            <label>이메일</label>
-            <div style="display:flex;">
-                <input type="text" id="emailUser" placeholder="아이디" style="flex:1;">
-                <span style="padding:0.6rem;">@</span>
-                <select id="emailDomain" style="flex:1;">
-                    <option value="gmail.com">gmail.com</option>
-                    <option value="naver.com">naver.com</option>
-                    <option value="daum.net">daum.net</option>
-                    <option value="custom">직접입력</option>
-                </select>
-            </div>
-            <input type="text" id="emailDomainCustom" placeholder="도메인 직접입력" style="display:none; margin-top:0.5rem;">
-        </div>
-        <!-- 주소 -->
-        <div class="field-group">
-            <label>주소</label>
-            <input type="text" id="address" readonly placeholder="클릭하여 주소 검색">
-        </div>
-        <!-- 상세 주소 -->
-        <div class="field-group">
-            <label>상세 주소</label>
-            <input type="text" id="addressDetail" placeholder="상세 주소를 입력하세요">
-        </div>
 
-        <!-- 기업 전용 -->
-        <div id="employerFields" style="display:none;">
-            <div class="field-group">
-                <label>대표자명</label>
-                <input type="text" id="representative">
+        <!-- 공통 필드 -->
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">아이디</label>
+                <input type="text" id="username" class="form-control" required>
             </div>
-            <div class="field-group">
-                <label>기업 규모</label>
-                <select id="companySize">
+            <div class="col-md-6">
+                <label class="form-label">비밀번호</label>
+                <input type="password" id="password" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">회원 유형</label>
+                <select id="userType" class="form-select" required>
                     <option value="">선택하세요</option>
-                    <option value="스타트업">스타트업</option>
-                    <option value="중소기업">중소기업</option>
-                    <option value="중견기업">중견기업</option>
-                    <option value="대기업">대기업</option>
+                    <option value="EMPLOYER">구인자 (기업)</option>
+                    <option value="FREELANCER">구직자 (프리랜서)</option>
                 </select>
             </div>
-            <div class="field-group">
-                <label>설립일</label>
-                <input type="date" id="establishedDate">
+            <div class="col-md-6">
+                <label class="form-label">이름</label>
+                <input type="text" id="name" class="form-control" required>
             </div>
-            <div class="field-group">
-                <label>주요업종</label>
-                <input type="text" id="mainIndustry">
+            <div class="col-md-6">
+                <label class="form-label">전화번호</label>
+                <input type="tel" id="phone" class="form-control" required>
             </div>
-            <div class="field-group">
-                <label>사원수</label>
-                <input type="number" id="employees">
+            <div class="col-md-6">
+                <label class="form-label">이메일</label>
+                <div class="input-group">
+                    <input type="text" id="emailUser" class="form-control" placeholder="아이디">
+                    <span class="input-group-text">@</span>
+                    <select id="emailDomain" class="form-select">
+                        <option value="gmail.com">gmail.com</option>
+                        <option value="naver.com">naver.com</option>
+                        <option value="daum.net">daum.net</option>
+                        <option value="custom">직접입력</option>
+                    </select>
+                </div>
+                <input type="text" id="emailDomainCustom" class="form-control mt-2" placeholder="도메인 직접입력" style="display:none;">
             </div>
-            <div class="field-group">
-                <label>자본금</label>
-                <input type="number" id="capital">
+            <div class="col-md-6">
+                <label class="form-label">주소</label>
+                <input type="text" id="address" class="form-control" readonly placeholder="클릭하여 주소 검색">
             </div>
-            <div class="field-group">
-                <label>연 매출</label>
-                <input type="number" id="annualRevenue">
-            </div>
-            <div class="field-group">
-                <label>홈페이지 URL</label>
-                <input type="text" id="homepageUrl">
+            <div class="col-md-6">
+                <label class="form-label">상세 주소</label>
+                <input type="text" id="addressDetail" class="form-control" placeholder="상세 주소">
             </div>
         </div>
 
-        <!-- 프리랜서 전용 -->
-        <div id="freelancerFields" style="display:none;">
-            <div class="field-group">
-                <label>희망 직무</label>
-                <input type="text" id="jobType">
-            </div>
-            <div class="field-group">
-                <label>경력</label>
-                <input type="text" id="career" placeholder="예: 신입, 3년차">
-            </div>
-            <div class="field-group">
-                <label>사용 기술 (클릭하여 선택/해제)</label>
-                <div id="techOptions">
-                    <span class="tech-option">Java</span><span class="tech-option">Javascript</span>
-                    <span class="tech-option">MySQL</span><span class="tech-option">PHP</span>
-                    <span class="tech-option">계획성</span><span class="tech-option">Jquery</span>
-                    <span class="tech-option">React</span><span class="tech-option">Git</span>
-                    <span class="tech-option">HTML</span><span class="tech-option">고객응대</span>
-                    <span class="tech-option">CSS</span><span class="tech-option">RDBMS</span>
-                    <span class="tech-option">MyBatis</span><span class="tech-option">SQL</span>
-                    <span class="tech-option">공감능력</span><span class="tech-option">JPA</span>
-                    <span class="tech-option">전자정보표준프레임워크</span><span class="tech-option">MariaDB</span>
-                    <span class="tech-option">TypeScript</span><span class="tech-option">고객지향성</span>
+        <!-- 기업용 필드 -->
+        <div id="employerFields" class="mt-4" style="display:none;">
+            <h5 class="fw-bold mb-3 mt-3">🏢 기업 정보</h5>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">대표자명</label>
+                    <input type="text" id="representative" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">기업 규모</label>
+                    <select id="companySize" class="form-select">
+                        <option value="">선택하세요</option>
+                        <option value="스타트업">스타트업</option>
+                        <option value="중소기업">중소기업</option>
+                        <option value="중견기업">중견기업</option>
+                        <option value="대기업">대기업</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">설립일</label>
+                    <input type="date" id="establishedDate" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">주요업종</label>
+                    <input type="text" id="mainIndustry" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">사원수</label>
+                    <input type="number" id="employees" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">자본금</label>
+                    <input type="number" id="capital" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">연매출</label>
+                    <input type="number" id="annualRevenue" class="form-control">
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">홈페이지 URL</label>
+                    <input type="text" id="homepageUrl" class="form-control">
                 </div>
             </div>
         </div>
 
-        <div style="margin-top:1rem;">
-            <button type="submit">회원가입</button>
+        <!-- 프리랜서용 필드 -->
+        <div id="freelancerFields" class="mt-4" style="display:none;">
+            <h5 class="fw-bold mb-3 mt-3">👨‍💻 프리랜서 정보</h5>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">희망 직무</label>
+                    <input type="text" id="jobType" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">경력</label>
+                    <input type="text" id="career" class="form-control">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">사용 기술 (클릭하여 선택)</label>
+                    <div id="techOptions" class="border rounded p-3">
+                        <span class="tech-option">Java</span><span class="tech-option">Javascript</span>
+                        <span class="tech-option">MySQL</span><span class="tech-option">React</span>
+                        <span class="tech-option">JPA</span><span class="tech-option">HTML</span>
+                        <span class="tech-option">CSS</span><span class="tech-option">Git</span>
+                        <span class="tech-option">SQL</span><span class="tech-option">MyBatis</span>
+                        <span class="tech-option">TypeScript</span><span class="tech-option">계획성</span>
+                        <span class="tech-option">공감능력</span><span class="tech-option">고객지향성</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-gold btn-lg">회원가입 완료</button>
         </div>
     </form>
 </div>
 
 <script>
     $(function(){
-        // 직군별 필드 토글
         $('#userType').change(function(){
-            $('#employerFields').toggle(this.value==='EMPLOYER');
-            $('#freelancerFields').toggle(this.value==='FREELANCER');
+            $('#employerFields').toggle(this.value === 'EMPLOYER');
+            $('#freelancerFields').toggle(this.value === 'FREELANCER');
         });
 
-        // 이메일 도메인 직접입력 토글
         $('#emailDomain').change(function(){
-            $('#emailDomainCustom').toggle(this.value==='custom');
+            $('#emailDomainCustom').toggle(this.value === 'custom');
         });
 
-        // Daum 주소검색
         $('#address').on('click', function(){
             new daum.Postcode({
                 oncomplete: function(data) {
-                    $('#address').val(data.roadAddress||data.jibunAddress);
+                    $('#address').val(data.roadAddress || data.jibunAddress);
                 }
             }).open();
         });
 
-        // 기술 스택 선택
         $('#techOptions').on('click', '.tech-option', function(){
             $(this).toggleClass('selected');
         });
 
-        // 폼 제출 처리 (JSON)
         $('#registerForm').submit(function(e){
             e.preventDefault();
             const userType = $('#userType').val();
-            const domain = $('#emailDomain').val()==='custom'
+            const domain = $('#emailDomain').val() === 'custom'
                 ? $('#emailDomainCustom').val()
                 : $('#emailDomain').val();
-            const email = $('#emailUser').val()+'@'+domain;
+            const email = $('#emailUser').val() + '@' + domain;
 
             const data = {
                 username: $('#username').val(),
@@ -196,26 +265,27 @@
                     phone: $('#phone').val(),
                     email: email,
                     address: $('#address').val(),
-                    addressDetail: $('#addressDetail').val()  // 추가된 상세 주소
+                    addressDetail: $('#addressDetail').val()
                 }
             };
 
-            if(userType==='EMPLOYER'){
-                Object.assign(data.profile,{
+            if(userType === 'EMPLOYER'){
+                Object.assign(data.profile, {
                     representative: $('#representative').val(),
                     companySize: $('#companySize').val(),
                     establishedDate: $('#establishedDate').val(),
                     mainIndustry: $('#mainIndustry').val(),
-                    employees: parseInt($('#employees').val()||0),
-                    capital: parseInt($('#capital').val()||0),
-                    annualRevenue: parseInt($('#annualRevenue').val()||0),
+                    employees: parseInt($('#employees').val() || 0),
+                    capital: parseInt($('#capital').val() || 0),
+                    annualRevenue: parseInt($('#annualRevenue').val() || 0),
                     homepageUrl: $('#homepageUrl').val()
                 });
             }
-            if(userType==='FREELANCER'){
+
+            if(userType === 'FREELANCER'){
                 const techs = $('#techOptions .tech-option.selected')
-                    .map(function(){return $(this).text();}).get();
-                Object.assign(data.profile,{
+                    .map(function(){ return $(this).text(); }).get();
+                Object.assign(data.profile, {
                     jobType: $('#jobType').val(),
                     career: $('#career').val(),
                     techStack: techs

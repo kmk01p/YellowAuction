@@ -1,80 +1,136 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>개인 프로필 수정</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>프리랜서 프로필 목록</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fdfaf1;
+            font-family: 'Pretendard', sans-serif;
+        }
+        .container {
+            margin-top: 60px;
+        }
+        .table-wrapper {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+        }
+        .btn-gold {
+            background-color: #f9c846;
+            border: none;
+            color: black;
+        }
+        .btn-gold:hover {
+            background-color: #f6b700;
+            color: white;
+        }
+        th {
+            background-color: #fff7dd;
+        }
+        table {
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
-<h2>개인 프로필 수정</h2>
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #fff7dd;">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="/">YellowAuction</a>
 
-<input type="hidden" id="profileId">
+        <div class="collapse navbar-collapse justify-content-end">
+            <ul class="navbar-nav">
 
-<label>이름:</label><br>
-<input type="text" id="name"><br>
+                <!-- 🔸 로그인한 경우 -->
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 홈 -->
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
+                       th:href="@{/dashboard/com_dashboard.html}">🏠 홈</a>
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
+                       th:href="@{/dashboard/free_dashboard.html}">🏠 홈</a>
+                </li>
 
-<label>전화번호:</label><br>
-<input type="tel" id="phone"><br>
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 마이페이지 -->
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
+                       th:href="@{/profile/com_list.html}">📂 마이페이지</a>
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
+                       th:href="@{/profile/free_list.html}">📂 마이페이지</a>
+                </li>
 
-<label>이메일:</label><br>
-<input type="email" id="email"><br>
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 경매 목록 -->
+                    <a class="nav-link" th:href="@{/board/list.html}">📋 경매 목록</a>
+                </li>
 
-<label>직업:</label><br>
-<select id="jobType">
-    <option value="">선택해주세요</option>
-    <option value="학생">학생</option>
-    <option value="직장인">직장인</option>
-</select><br>
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 로그아웃 -->
+                    <a class="nav-link" th:href="@{/logout}">🔓 로그아웃</a>
+                </li>
 
-<label>경력:</label><br>
-<input type="text" id="career"><br>
+                <!-- 🔹 비로그인 상태 -->
+                <li class="nav-item" th:if="${session.loginUser == null}">
+                    <a class="nav-link" th:href="@{/login}">🔑 로그인</a>
+                </li>
+                <li class="nav-item" th:if="${session.loginUser == null}">
+                    <a class="nav-link" th:href="@{/register}">📝 회원가입</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-<label>기술 스택:</label><br>
-<input type="text" id="techStack"><br><br>
+<div class="container">
+    <div class="table-wrapper">
+        <h2 class="text-center fw-bold mb-4">👨‍💻 프리랜서 프로필 목록</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle text-center" id="profileTable">
+                <thead class="table-light">
+                <tr>
+                    <th>이름</th>
+                    <th>전문분야</th>
+                    <th>기술스택</th>
+                    <th>경력(년)</th>
+                    <th>포트폴리오</th>
+                    <th>전화번호</th>
+                    <th>이메일</th>
+                    <th>작업</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-<button id="updateBtn">수정 완료</button>
-<button onclick="history.back()">취소</button>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // ① URL에서 id 가져오기
-    const params = new URLSearchParams(location.search);
-    const id = params.get('id');
-    $('#profileId').val(id);
+    $(document).ready(loadList);
 
-    // ② 기존 데이터 로드
-    $.getJSON(`/api/profile/${id}`, function(res){
-        const p = res.data;
-        $('#name').val(p.name);
-        $('#phone').val(p.phone);
-        $('#email').val(p.email);
-        $('#jobType').val(p.jobType);
-        $('#career').val(p.career);
-        $('#techStack').val(p.techStack);
-    });
-
-    // ③ 업데이트 요청
-    $('#updateBtn').on('click', function(){
-        const dto = {
-            name: $('#name').val(),
-            phone: $('#phone').val(),
-            email: $('#email').val(),
-            jobType: $('#jobType').val(),
-            career: $('#career').val(),
-            techStack: $('#techStack').val()
-        };
-        $.ajax({
-            url: `/api/profile/${id}`,
-            method: 'PUT',
-            contentType: 'application/json',
-            data: JSON.stringify(dto),
-            success: function(){
-                location.href = '/profile/free_list.html';
-            },
-            error: function(xhr){
-                alert('수정 중 오류: ' + xhr.responseText);
-            }
+    function loadList() {
+        $.getJSON('/api/profile', function (res) {
+            const tbody = $('#profileTable tbody').empty();
+            res.data.forEach(p => {
+                const row = $('<tr>');
+                row.append(`<td>${p.name}</td>`);
+                row.append(`<td>${p.specialty}</td>`);
+                row.append(`<td>${p.skills.join(', ')}</td>`);
+                row.append(`<td>${p.experience}년</td>`);
+                row.append(`<td><a href="${p.portfolioUrl}" target="_blank">포트폴리오 보기</a></td>`);
+                row.append(`<td>${p.phone}</td>`);
+                row.append(`<td>${p.email}</td>`);
+                row.append(`
+          <td>
+            <button class="btn btn-sm btn-gold" onclick="location.href='/profile/free_detail?id=${p.id}'">수정</button>
+          </td>
+        `);
+                row.appendTo(tbody);
+            });
         });
-    });
+    }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

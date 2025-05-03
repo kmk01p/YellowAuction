@@ -1,37 +1,125 @@
-<!-- src/main/resources/static/board/free_detail.html -->
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>프로젝트 경매(프리랜서)</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>프리랜서 경매 입찰</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fdfaf1;
+            font-family: 'Pretendard', sans-serif;
+        }
+        .main-card {
+            max-width: 600px;
+            margin: 60px auto;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 6px 28px rgba(0,0,0,0.08);
+            background: #ffffff;
+        }
+        .highlight {
+            color: #f9c846;
+        }
+        .current-price-box {
+            background-color: #fff3cd;
+            border-left: 6px solid #f9c846;
+            padding: 16px 20px;
+            border-radius: 10px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+        .btn-gold {
+            background-color: #f9c846;
+            border: none;
+            color: black;
+        }
+        .btn-gold:hover {
+            background-color: #f6b700;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-<h2>프로젝트 경매</h2>
-<input type="hidden" id="projId">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #fff7dd;">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="/">YellowAuction</a>
 
-<div>
-    <p>프로젝트명: <span id="title"></span></p>
-    <p>현재 입찰가: ₩<span id="currentPrice"></span></p>
+        <div class="collapse navbar-collapse justify-content-end">
+            <ul class="navbar-nav">
 
-    <label>입찰 금액 (단위: 만원):</label><br>
-    <input type="text" id="bidStep" placeholder="숫자만 입력하세요"> <span>만원</span><br><br>
+                <!-- 🔸 로그인한 경우 -->
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 홈 -->
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
+                       th:href="@{/dashboard/com_dashboard.html}">🏠 홈</a>
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
+                       th:href="@{/dashboard/free_dashboard.html}">🏠 홈</a>
+                </li>
 
-    <button id="bidBtn">입찰하기</button>
-    <button onclick="history.back()">목록</button>
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 마이페이지 -->
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
+                       th:href="@{/profile/com_list.html}">📂 마이페이지</a>
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
+                       th:href="@{/profile/free_list.html}">📂 마이페이지</a>
+                </li>
+
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 경매 목록 -->
+                    <a class="nav-link" th:href="@{/board/list.html}">📋 경매 목록</a>
+                </li>
+
+                <li class="nav-item" th:if="${session.loginUser != null}">
+                    <!-- 로그아웃 -->
+                    <a class="nav-link" th:href="@{/logout}">🔓 로그아웃</a>
+                </li>
+
+                <!-- 🔹 비로그인 상태 -->
+                <li class="nav-item" th:if="${session.loginUser == null}">
+                    <a class="nav-link" th:href="@{/login}">🔑 로그인</a>
+                </li>
+                <li class="nav-item" th:if="${session.loginUser == null}">
+                    <a class="nav-link" th:href="@{/register}">📝 회원가입</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card main-card p-5">
+        <h2 class="text-center fw-bold mb-4">📢 <span class="highlight">프로젝트 경매</span></h2>
+        <input type="hidden" id="projId">
+
+        <div class="mb-4">
+            <h5 class="fw-bold">프로젝트명:</h5>
+            <p id="title" class="fs-5 text-secondary">로딩 중...</p>
+        </div>
+
+        <div class="current-price-box">
+            현재 입찰가: <span id="currentPrice">0</span> 원
+        </div>
+
+        <div class="mb-3">
+            <label for="bidStep" class="form-label fw-bold">입찰 금액 (단위: 만원)</label>
+            <input type="text" id="bidStep" class="form-control form-control-lg" placeholder="예: 10">
+        </div>
+
+        <div class="d-grid gap-2">
+            <button class="btn btn-gold btn-lg" id="bidBtn">💰 입찰하기</button>
+            <button class="btn btn-outline-dark" onclick="history.back()">← 목록으로 돌아가기</button>
+        </div>
+    </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // URL path에서 id 추출
     const segments = window.location.pathname.split('/');
     const id = segments[segments.length - 1];
-    // const params = new URLSearchParams(location.search);
-    // const id = params. get('id');
-
     $('#projId').val(id);
 
-    // 프로젝트 정보 불러오기
-    function loadDetail(){
+    function loadDetail() {
         $.getJSON(`/api/board/${id}`, res => {
             const p = res.data;
             $('#title').text(p.title);
@@ -42,21 +130,14 @@
     $('#bidBtn').click(() => {
         const key = `bid_done_${id}`;
 
-        // 연속 입찰 방지
-        // if (localStorage.getItem(key) === 'true') {
-        //     return alert('연속 입찰은 불가능합니다.');
-        // }
-
-        // 입력값에서 숫자만 추출
         const raw = $('#bidStep').val() || '';
         const numeric = raw.replace(/\D/g, '');
         const step = parseInt(numeric, 10) || 0;
 
         if (step < 1) {
-            return alert('최소 1 이상의 숫자를 입력하세요.');
+            return alert('⚠️ 최소 1 이상의 숫자를 입력하세요.');
         }
 
-        // '만원' 단위 금액 계산
         const amount = step * 10000;
 
         $.ajax({
@@ -66,16 +147,17 @@
             data: JSON.stringify({ amount }),
             success: () => {
                 localStorage.setItem(key, 'true');
-                alert(`입찰 성공! ${step}만원을 경매했습니다.`);
+                alert(`✅ ${step}만원 입찰 성공!`);
                 loadDetail();
             },
             error: xhr => {
-                alert('입찰 실패: ' + xhr.responseText);
+                alert('❌ 입찰 실패: ' + xhr.responseText);
             }
         });
     });
 
     $(document).ready(loadDetail);
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
