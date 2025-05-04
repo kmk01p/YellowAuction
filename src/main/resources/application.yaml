@@ -10,10 +10,10 @@ logging:
 spring:
   #
   datasource:
-    url: jdbc:mysql://db.forhim.kr:3306/dbwilliam7872ksh?characterEncoding=UTF-8&serverTimezone=Asia/Seoul&useSSL=false
-    username: william7872ksh
-    password: bnn3570jhk7872!
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: 
+    username: 
+    password: 
+    driver-class-name:
   #
   jpa:
     defer-datasource-initialization: true
@@ -45,17 +45,7 @@ springdoc:
     tags-sorter: alpha
 
 external:
-  jwt:
-    tokenSecretKey: cfc6f8968e16e357e2a588674174bc2ca34b538e9f759d081d48721fd0aa1f626188fca140ca58a5b88d6e98b3302c52f49f7fa1dc06924c34ecd45b31ba675e
-    tokenPrefix: Bearer/u0020
-    accessKey: Authorization
-    accessTokenExpirationTime: 1800000
-    refreshKey: RefreshToken
-    refreshTokenExpirationTime: 1209600000
-    # ????? ??? ??????? ???? refreshTokenExpirationDate: 120
-    # 1000 * 60 * 60 * 24 * 7 = 604800000 1?
-    # 1000 * 60 * 60 * 24 * 7 * 4 = 1209600000 2?
-    # 1000 * 60 * 30 = 1800000 30?
+    
 mybatis:
   type-aliases-package: com.example.yellowaution.domain
   mapper-locations: classpath:mapper/**/*.xml
