@@ -3,6 +3,7 @@ package com.example.yellowaution.service.impl;
 import com.example.yellowaution.domain.Profile;
 import com.example.yellowaution.domain.User;
 import com.example.yellowaution.dto.ProfileDto;
+import com.example.yellowaution.dto.UserAdminDto;
 import com.example.yellowaution.dto.UserRegisterDto;
 import com.example.yellowaution.repository.ProfileRepository;
 import com.example.yellowaution.repository.UserRepository;
@@ -10,6 +11,9 @@ import com.example.yellowaution.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -26,6 +30,24 @@ public class UserServiceImpl implements UserService {
         this.profileRepository = profileRepository;
         this.passwordEncoder = passwordEncoder;
     }
+
+    public List<UserAdminDto> findAllForAdmin() {
+        return userRepository.findAll().stream()
+                .map(user -> {
+                    Profile profile = profileRepository.findByUser(user);  // user에 종속된 프로필
+                    return new UserAdminDto(
+                            user.getId(),
+                            user.getUsername(),
+                            user.getRole(),
+                            user.getUserType(),
+                            profile != null ? profile.getEmail() : null,
+                            profile != null && profile.getEstablishedDate() != null
+                                    ? profile.getEstablishedDate().toString() : null
+                    );
+                }).toList();
+    }
+
+
 
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.yellowaution.service;
 import com.example.yellowaution.domain.Board;
 import com.example.yellowaution.dto.BoardDto;
+import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
@@ -13,5 +14,5 @@ public interface BoardService {
     Board update(Long id, Board board);
     void delete(Long id);
     Board close(Long id);
-    Board bid(Long id, Long amount);
+    Board bid(Long boardId, Long amount, HttpSession session);
 }

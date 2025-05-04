@@ -42,7 +42,6 @@
     <div th:if="${session.loginUser != null}">
         <p class="welcome-text">
             환영합니다, <span th:text="${session.loginUser.username}"></span>님!<br>
-            (권한: <span th:text="${session.loginUser.role}"></span>)
         </p>
         <div class="d-grid gap-2">
             <button class="btn btn-gold btn-lg" onclick="location.href='/profile/com_list.html'">👤 마이페이지</button>

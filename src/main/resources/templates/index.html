@@ -87,7 +87,6 @@
     <div th:if="${session.loginUser != null}">
         <p class="welcome-text">
             환영합니다, <span th:text="${session.loginUser.username}">사용자</span>님!<br>
-            (권한: <span th:text="${session.loginUser.role}">ROLE</span>)
         </p>
         <div class="d-grid gap-2">
             <a th:href="@{/logout}" class="btn btn-outline-dark btn-lg">🔓 로그아웃</a>

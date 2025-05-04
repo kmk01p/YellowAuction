@@ -50,6 +50,8 @@
                        th:href="@{/dashboard/com_dashboard.html}">🏠 홈</a>
                     <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
                        th:href="@{/dashboard/free_dashboard.html}">🏠 홈</a>
+                    <a class="nav-link" th:if="${session.loginUser.userType == 'ADMIN'}"
+                       th:href="@{/dashboard/admin_dashboard.html}">🏠 홈</a>
                 </li>
 
                 <li class="nav-item" th:if="${session.loginUser != null}">

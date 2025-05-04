@@ -67,9 +67,12 @@ public class BoardRestController {
     }
 
     @PostMapping("/{id}/bid")
-    public ApiResponse bid(@PathVariable Long id, @RequestBody Map<String, Long> body) {
-        return new ApiResponse(service.bid(id, body.getOrDefault("amount", 0L)));
+    public ApiResponse bid(@PathVariable Long id,
+                           @RequestBody Map<String, Long> body,
+                           HttpSession session) {
+        return new ApiResponse(service.bid(id, body.getOrDefault("amount", 0L), session));
     }
+
 
 
 }

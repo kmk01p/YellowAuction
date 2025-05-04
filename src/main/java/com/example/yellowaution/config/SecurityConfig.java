@@ -31,11 +31,12 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/register", "/api/auth/**", "/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/dashboard/admin_dashboard", "/create/admin_create").hasRole("ADMIN")
+                        .requestMatchers("/dashboard/admin_dashboard").hasAuthority("ADMIN") // ✅ 여기
                         .requestMatchers("/dashboard/com_dashboard", "/create/com_create").hasAuthority("EMPLOYER")
                         .requestMatchers("/dashboard/free_dashboard", "/create/free_create").hasAuthority("FREELANCER")
                         .anyRequest().authenticated()
                 )
+
 
                 .formLogin(form -> form
                         .loginPage("/login")                         // 로그인 폼 페이지
