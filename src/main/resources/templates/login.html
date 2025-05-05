@@ -33,52 +33,35 @@
             color: red;
             margin-top: 10px;
         }
+
+        /* 아이디/비밀번호 찾기 링크 우측 정렬 */
+        .help-links {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 16px;
+            border-top: 1px solid #ececec;
+            padding-top: 16px;
+            display: flex;
+            justify-content: flex-end;  /* 좌우 끝이 아닌 오른쪽 정렬 */
+            gap: 1.5rem;                /* 링크 사이 간격 */
+        }
+        .help-links a {
+            color: #f9c846;
+            text-decoration: none;
+        }
+        .help-links a:hover {
+            text-decoration: underline;
+            color: #f6b700;
+        }
     </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #fff7dd;">
     <div class="container-fluid">
         <a class="navbar-brand fw-bold" href="/">YellowAuction</a>
-
         <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
-
-                <!-- 🔸 로그인한 경우 -->
-                <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 홈 -->
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
-                       th:href="@{/dashboard/com_dashboard.html}">🏠 홈</a>
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
-                       th:href="@{/dashboard/free_dashboard.html}">🏠 홈</a>
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'ADMIN'}"
-                       th:href="@{/dashboard/admin_dashboard.html}">🏠 홈</a>
-                </li>
-
-                <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 마이페이지 -->
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
-                       th:href="@{/profile/com_list.html}">📂 마이페이지</a>
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
-                       th:href="@{/profile/free_list.html}">📂 마이페이지</a>
-                </li>
-
-                <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 경매 목록 -->
-                    <a class="nav-link" th:href="@{/board/list.html}">📋 경매 목록</a>
-                </li>
-
-                <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 로그아웃 -->
-                    <a class="nav-link" th:href="@{/logout}">🔓 로그아웃</a>
-                </li>
-
-                <!-- 🔹 비로그인 상태 -->
-                <li class="nav-item" th:if="${session.loginUser == null}">
-                    <a class="nav-link" th:href="@{/login}">🔑 로그인</a>
-                </li>
-                <li class="nav-item" th:if="${session.loginUser == null}">
-                    <a class="nav-link" th:href="@{/register}">📝 회원가입</a>
-                </li>
+                <!-- 로그인 상태별 메뉴 -->
             </ul>
         </div>
     </div>
@@ -102,6 +85,13 @@
             [[${loginError}]]
         </div>
     </form>
+
+    <!-- 두 링크를 우측에 붙여서 정렬 -->
+    <div class="help-links">
+        <a th:href="@{/recover/username}">아이디 찾기</a>
+        <a th:href="@{/recover/password}">비밀번호 찾기</a>
+    </div>
+
     <p class="text-center mt-4">
         계정이 없으신가요?
         <a th:href="@{/register}" class="text-decoration-none fw-semibold">회원가입하기</a>
