@@ -1,0 +1,28 @@
+# 운영체제
+.DS_Store
+Thumbs.db
+
+# IDE
+/.idea/
+/*.iml
+/.vscode/
+
+# 빌드 아티팩트
+/target/
+/build/
+
+# 로그
+/logs/
+/*.log
+
+# 임시 파일
+*.tmp
+*.swp
+
+# 환경설정 파일
+application.yaml
+
+# 그 외
+*.class
+*.jar
+*.war

@@ -2,20 +2,24 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <!-- 1. 반응형 뷰포트 메타 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>회사 프로필 수정</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 2. 공통 반응형 CSS -->
+    <link rel="stylesheet" href="/css/responsive.css">
     <style>
         body {
             background-color: #fdfaf1;
             font-family: 'Pretendard', sans-serif;
         }
         .main-card {
-            max-width: 700px;
-            margin: 60px auto;
-            padding: 40px;
+            width: 100%;
             background-color: #ffffff;
             border-radius: 16px;
             box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            margin: 60px 0;
         }
         .btn-gold {
             background-color: #f9c846;
@@ -32,119 +36,91 @@
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #fff7dd;">
-    <div class="container-fluid">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
         <a class="navbar-brand fw-bold" href="/">YellowAuction</a>
-
-        <div class="collapse navbar-collapse justify-content-end">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navMenu">
             <ul class="navbar-nav">
-
-                <!-- 🔸 로그인한 경우 -->
                 <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 홈 -->
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
-                       th:href="@{/dashboard/com_dashboard.html}">🏠 홈</a>
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
-                       th:href="@{/dashboard/free_dashboard.html}">🏠 홈</a>
+                    <a class="nav-link" th:href="@{/dashboard/com_dashboard.html}">🏠 홈</a>
                 </li>
-
                 <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 마이페이지 -->
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
-                       th:href="@{/profile/com_list.html}">📂 마이페이지</a>
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
-                       th:href="@{/profile/free_list.html}">📂 마이페이지</a>
+                    <a class="nav-link" th:href="@{/profile/com_list.html}">📂 마이페이지</a>
                 </li>
-
                 <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 경매 목록 -->
                     <a class="nav-link" th:href="@{/board/list.html}">📋 경매 목록</a>
                 </li>
-
                 <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 로그아웃 -->
                     <a class="nav-link" th:href="@{/logout}">🔓 로그아웃</a>
-                </li>
-
-                <!-- 🔹 비로그인 상태 -->
-                <li class="nav-item" th:if="${session.loginUser == null}">
-                    <a class="nav-link" th:href="@{/login}">🔑 로그인</a>
-                </li>
-                <li class="nav-item" th:if="${session.loginUser == null}">
-                    <a class="nav-link" th:href="@{/register}">📝 회원가입</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<div class="main-card">
-    <h2 class="text-center fw-bold mb-4">🏢 회사 프로필 수정</h2>
-    <input type="hidden" id="profileId">
+<div class="container">
+    <div class="main-card">
+        <h2 class="text-center fw-bold mb-4">🏢 회사 프로필 수정</h2>
+        <input type="hidden" id="profileId">
 
-    <div class="mb-3">
-        <label class="form-label">회사명</label>
-        <input type="text" class="form-control" id="name">
-    </div>
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <label class="form-label">회사명</label>
+                <input type="text" class="form-control" id="name">
+            </div>
+            <div class="col-12 col-md-6">
+                <label class="form-label">대표자명</label>
+                <input type="text" class="form-control" id="representative">
+            </div>
+            <div class="col-12 col-md-6">
+                <label class="form-label">기업 규모</label>
+                <input type="text" class="form-control" id="companySize">
+            </div>
+            <div class="col-12 col-md-6">
+                <label class="form-label">설립일</label>
+                <input type="date" class="form-control" id="establishedDate">
+            </div>
+            <div class="col-12">
+                <label class="form-label">주요 업종</label>
+                <input type="text" class="form-control" id="mainIndustry">
+            </div>
+            <div class="col-12">
+                <label class="form-label">주소</label>
+                <textarea class="form-control" id="address" rows="2"></textarea>
+            </div>
+            <div class="col-12 col-md-4">
+                <label class="form-label">사원 수</label>
+                <input type="number" class="form-control" id="employees">
+            </div>
+            <div class="col-12 col-md-4">
+                <label class="form-label">자본금 (원)</label>
+                <input type="number" class="form-control" id="capital">
+            </div>
+            <div class="col-12 col-md-4">
+                <label class="form-label">연매출 (원)</label>
+                <input type="number" class="form-control" id="annualRevenue">
+            </div>
+            <div class="col-12 col-md-6">
+                <label class="form-label">홈페이지 URL</label>
+                <input type="url" class="form-control" id="homepageUrl">
+            </div>
+            <div class="col-12 col-md-6">
+                <label class="form-label">전화번호</label>
+                <input type="tel" class="form-control" id="phone">
+            </div>
+            <div class="col-12">
+                <label class="form-label">이메일</label>
+                <input type="email" class="form-control" id="email">
+            </div>
+        </div>
 
-    <div class="mb-3">
-        <label class="form-label">대표자명</label>
-        <input type="text" class="form-control" id="representative">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">기업 규모</label>
-        <input type="text" class="form-control" id="companySize">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">설립일</label>
-        <input type="date" class="form-control" id="establishedDate">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">주요 업종</label>
-        <input type="text" class="form-control" id="mainIndustry">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">주소</label>
-        <textarea class="form-control" id="address" rows="2"></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">사원 수</label>
-        <input type="number" class="form-control" id="employees">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">자본금 (단위: 원)</label>
-        <input type="number" class="form-control" id="capital">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">연매출 (단위: 원)</label>
-        <input type="number" class="form-control" id="annualRevenue">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">홈페이지 URL</label>
-        <input type="url" class="form-control" id="homepageUrl">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">전화번호</label>
-        <input type="tel" class="form-control" id="phone">
-    </div>
-
-    <div class="mb-4">
-        <label class="form-label">이메일</label>
-        <input type="email" class="form-control" id="email">
-    </div>
-
-    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-        <button class="btn btn-gold px-4" id="updateBtn">수정 완료</button>
-        <button class="btn btn-outline-secondary px-4" onclick="history.back()">취소</button>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+            <button class="btn btn-gold px-4" id="updateBtn">수정 완료</button>
+            <button class="btn btn-outline-secondary px-4" onclick="history.back()">취소</button>
+        </div>
     </div>
 </div>
 
@@ -153,8 +129,7 @@
     const params = new URLSearchParams(location.search);
     const id = params.get('id');
     $('#profileId').val(id);
-
-    $.getJSON(`/api/profile/${id}`, function(res){
+    $.getJSON(`/api/profile/${id}`, res => {
         const p = res.data;
         $('#name').val(p.name);
         $('#representative').val(p.representative);
@@ -169,8 +144,7 @@
         $('#phone').val(p.phone);
         $('#email').val(p.email);
     });
-
-    $('#updateBtn').on('click', function(){
+    $('#updateBtn').click(() => {
         const dto = {
             name: $('#name').val(),
             representative: $('#representative').val(),
@@ -178,7 +152,7 @@
             establishedDate: $('#establishedDate').val(),
             mainIndustry: $('#mainIndustry').val(),
             address: $('#address').val(),
-            employees: parseInt($('#employees').val(), 10),
+            employees: parseInt($('#employees').val(),10),
             capital: parseFloat($('#capital').val()),
             annualRevenue: parseFloat($('#annualRevenue').val()),
             homepageUrl: $('#homepageUrl').val(),
@@ -190,9 +164,7 @@
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(dto),
-            success: function(){
-                location.href = '/profile/com_list.html';
-            }
+            success: () => location.href='/profile/com_list.html'
         });
     });
 </script>

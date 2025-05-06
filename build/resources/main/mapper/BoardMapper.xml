@@ -6,36 +6,55 @@
 <mapper namespace="com.example.yellowaution.mapper.BoardMapper">
 
     <!-- 1) Technologies 조회 -->
-    <select id="selectTechnologies" parameterType="long" resultType="string">
+    <select id="selectTechnologies"
+            parameterType="long"
+            resultType="string">
         SELECT technology
         FROM board_technologies
         WHERE board_id = #{id}
     </select>
 
     <!-- 2) Board 전체 필드 매핑 -->
-    <resultMap id="boardResultMap" type="com.example.yellowaution.domain.Board">
-        <id     property="id"            column="id"/>
-        <result property="title"         column="title"/>
-        <result property="dueDate"       column="due_date" javaType="java.time.LocalDate"/>
-        <result property="description"   column="description"/>
-        <result property="recruitPeriod" column="recruit_period"/>
-        <result property="startPrice"    column="start_price"/>
-        <result property="currentPrice"  column="current_price"/>
-        <result property="status"        column="status"/>
-        <result property="createdAt"     column="created_at" javaType="java.time.LocalDateTime"/>
+    <resultMap id="boardResultMap"
+               type="com.example.yellowaution.domain.Board">
+        <id     property="id"          column="id"/>
+        <result property="title"       column="title"/>
 
-        <!-- User 연관 매핑 -->
-        <association property="user" javaType="com.example.yellowaution.domain.User">
+        <!-- dueDate는 LocalDateTime으로 매핑 -->
+        <result property="dueDate"
+                column="due_date"
+                javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+
+        <result property="description" column="description"/>
+        <result property="recruitPeriod" column="recruit_period"/>
+        <result property="startPrice"  column="start_price"/>
+        <result property="currentPrice" column="current_price"/>
+        <result property="status"      column="status"/>
+
+        <!-- createdAt도 LocalDateTime으로 매핑 -->
+        <result property="createdAt"
+                column="created_at"
+                javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+
+        <!-- User 연관 매핑 (ID만 가져옴) -->
+        <association property="user"
+                     javaType="com.example.yellowaution.domain.User">
             <id property="id" column="user_id"/>
         </association>
 
         <!-- Technologies 리스트 매핑 -->
-        <collection property="technologies" ofType="java.lang.String"
-                    column="id" select="selectTechnologies"/>
+        <collection property="technologies"
+                    ofType="java.lang.String"
+                    column="id"
+                    select="selectTechnologies"/>
     </resultMap>
 
     <!-- 3) 검색용 쿼리 -->
-    <select id="searchByKeyword" parameterType="hashMap" resultMap="boardResultMap">
+    <select id="searchByKeyword"
+            parameterType="string"
+            resultMap="boardResultMap">
         SELECT DISTINCT
         b.id,
         b.title,
@@ -48,7 +67,8 @@
         b.created_at,
         b.user_id
         FROM board b
-        LEFT JOIN board_technologies bt ON b.id = bt.board_id
+        LEFT JOIN board_technologies bt
+        ON b.id = bt.board_id
         WHERE 1=1
         <if test="keyword != null and keyword != ''">
             AND (
@@ -61,7 +81,9 @@
     </select>
 
     <!-- 4) 정렬용 쿼리 -->
-    <select id="sortByCriteria" parameterType="hashMap" resultMap="boardResultMap">
+    <select id="sortByCriteria"
+            parameterType="string"
+            resultMap="boardResultMap">
         SELECT
         b.id,
         b.title,
