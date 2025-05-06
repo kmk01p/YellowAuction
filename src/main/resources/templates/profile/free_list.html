@@ -2,21 +2,23 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>개인 프로필</title>
+    <!-- 반응형 뷰포트 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>개인 프로필 목록</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 공통 반응형 CSS -->
+    <link rel="stylesheet" href="/css/responsive.css">
     <style>
         body {
             background-color: #fdfaf1;
             font-family: 'Pretendard', sans-serif;
         }
-        .container {
-            margin-top: 60px;
-        }
         .table-wrapper {
             background-color: #ffffff;
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+            margin: 60px 0;
         }
         .btn-gold {
             background-color: #f9c846;
@@ -36,41 +38,29 @@
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #fff7dd;">
-    <div class="container-fluid">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
         <a class="navbar-brand fw-bold" href="/">YellowAuction</a>
-
-        <div class="collapse navbar-collapse justify-content-end">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navMenu">
             <ul class="navbar-nav">
-
-                <!-- 🔸 로그인한 경우 -->
                 <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 홈 -->
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
-                       th:href="@{/dashboard/com_dashboard.html}">🏠 홈</a>
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
-                       th:href="@{/dashboard/free_dashboard.html}">🏠 홈</a>
+                    <a class="nav-link"
+                       th:href="@{${session.loginUser.userType=='EMPLOYER'}?'/dashboard/com_dashboard.html':'/dashboard/free_dashboard.html'}">
+                        🏠 홈
+                    </a>
                 </li>
-
                 <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 마이페이지 -->
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
-                       th:href="@{/profile/com_list.html}">📂 마이페이지</a>
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
-                       th:href="@{/profile/free_list.html}">📂 마이페이지</a>
+                    <a class="nav-link" th:href="@{/profile/free_list.html}">📂 마이페이지</a>
                 </li>
-
                 <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 경매 목록 -->
                     <a class="nav-link" th:href="@{/board/list.html}">📋 경매 목록</a>
                 </li>
-
                 <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 로그아웃 -->
                     <a class="nav-link" th:href="@{/logout}">🔓 로그아웃</a>
                 </li>
-
-                <!-- 🔹 비로그인 상태 -->
                 <li class="nav-item" th:if="${session.loginUser == null}">
                     <a class="nav-link" th:href="@{/login}">🔑 로그인</a>
                 </li>
@@ -106,28 +96,30 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function loadList(){
-        $.getJSON('/api/profile', function(res){
+    $(document).ready(loadList);
+    function loadList() {
+        $.getJSON('/api/profile', function(res) {
             const tbody = $('#profileTable tbody').empty();
             res.data.forEach(p => {
-                const row = $('<tr>');
-                row.append(`<td>${p.name}</td>`);
-                row.append(`<td>${p.phone}</td>`);
-                row.append(`<td>${p.email}</td>`);
-                row.append(`<td>${p.jobType}</td>`);
-                row.append(`<td>${p.career}</td>`);
-                row.append(`<td>${p.techStack}</td>`);
-                row.append(`
-          <td>
-            <button class="btn btn-sm btn-gold" onclick="location.href='/profile/free_detail.html?id=${p.id}'">수정</button>
-          </td>
+                tbody.append(`
+          <tr>
+            <td>${p.name}</td>
+            <td>${p.phone}</td>
+            <td>${p.email}</td>
+            <td>${p.jobType}</td>
+            <td>${p.career}</td>
+            <td>${p.techStack}</td>
+            <td>
+              <button class="btn btn-sm btn-gold"
+                      onclick="location.href='/profile/free_detail.html?id=${p.id}'">
+                수정
+              </button>
+            </td>
+          </tr>
         `);
-                row.appendTo(tbody);
             });
         });
     }
-
-    $(document).ready(loadList);
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

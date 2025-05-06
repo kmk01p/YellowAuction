@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface BidService {
     List<BidAdminDto> findAllForAdmin();
+    List<BidAdminDto> findAllForAdminByBoardId(Long boardId);
 }

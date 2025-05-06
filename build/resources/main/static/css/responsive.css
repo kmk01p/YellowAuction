@@ -1,0 +1,24 @@
+/* 모든 컨테이너에 좌우 패딩 추가 */
+.container, .container-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* 작은 화면(모바일) 전용 조정 */
+@media (max-width: 576px) {
+    .home-box,
+    .login-card,
+    .register-card,
+    .main-card,
+    .project-card,
+    .section-box {
+        margin: 20px !important;
+        padding: 20px !important;
+    }
+    .home-box h2,
+    .login-card h2,
+    .register-card h2 {
+        font-size: 1.25rem;
+    }
+
+}

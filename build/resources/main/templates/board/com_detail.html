@@ -2,16 +2,23 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>경매 상세</title>
+    <!-- 1. 반응형 뷰포트 메타 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>경매 상세 수정</title>
+
+    <!-- Bootstrap & 공통 반응형 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/responsive.css}">
+    <link rel="stylesheet" href="/css/responsive.css">
+
     <style>
         body {
             background-color: #fdfaf1;
             font-family: 'Pretendard', sans-serif;
         }
         .main-card {
-            max-width: 800px;
-            margin: 60px auto;
+            /* max-width 대신 그리드로 감쌌기 때문에 width:100%만 줘도 충분합니다 */
+            width: 100%;
             border: none;
             border-radius: 16px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.08);
@@ -23,6 +30,25 @@
         }
         .highlight {
             color: #f9c846;
+        }
+        .tech-option {
+            padding: 8px 16px;
+            border-radius: 30px;
+            margin: 4px;
+            border: 1px solid #f9c846;
+            background-color: #fffbea;
+            color: #555;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .tech-option:hover {
+            background-color: #f9c846;
+            color: #fff;
+        }
+        .tech-option.selected {
+            background-color: #f9c846;
+            color: #fff;
+            font-weight: 600;
         }
         .btn-gold {
             background-color: #f9c846;
@@ -36,163 +62,147 @@
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #fff7dd;">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="/">YellowAuction</a>
-
-        <div class="collapse navbar-collapse justify-content-end">
-            <ul class="navbar-nav">
-
-                <!-- 🔸 로그인한 경우 -->
-                <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 홈 -->
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
-                       th:href="@{/dashboard/com_dashboard.html}">🏠 홈</a>
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
-                       th:href="@{/dashboard/free_dashboard.html}">🏠 홈</a>
-                </li>
-
-                <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 마이페이지 -->
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
-                       th:href="@{/profile/com_list.html}">📂 마이페이지</a>
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
-                       th:href="@{/profile/free_list.html}">📂 마이페이지</a>
-                </li>
-
-                <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 경매 목록 -->
-                    <a class="nav-link" th:href="@{/board/list.html}">📋 경매 목록</a>
-                </li>
-
-                <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 로그아웃 -->
-                    <a class="nav-link" th:href="@{/logout}">🔓 로그아웃</a>
-                </li>
-
-                <!-- 🔹 비로그인 상태 -->
-                <li class="nav-item" th:if="${session.loginUser == null}">
-                    <a class="nav-link" th:href="@{/login}">🔑 로그인</a>
-                </li>
-                <li class="nav-item" th:if="${session.loginUser == null}">
-                    <a class="nav-link" th:href="@{/register}">📝 회원가입</a>
-                </li>
-            </ul>
-        </div>
-    </div>
+<!-- 네비게이션도 반응형 그리드로 감싸면 좋습니다 -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    …네비게이션…
 </nav>
 
 <div class="container">
-    <div class="card main-card p-5">
-        <h2 class="text-center header mb-4">🛠️ <span class="highlight">프로젝트 상세 수정</span></h2>
-        <input type="hidden" id="projId">
+    <!-- 2. Bootstrap 그리드: 모바일(sm)부터 100%, md부터 10/12, lg부터 8/12 너비 -->
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="card p-5 main-card">
+                <h2 class="text-center mb-4">🛠️ 프로젝트 상세 수정</h2>
+                <input type="hidden" id="projId">
 
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="title" placeholder="프로젝트명">
-            <label for="title">프로젝트명</label>
-        </div>
+                <!-- 프로젝트명 -->
+                <div class="form-floating mb-3">
+                    <input type="text" id="title" class="form-control" placeholder="프로젝트명">
+                    <label for="title">프로젝트명</label>
+                </div>
 
-        <div class="form-floating mb-3">
-            <input type="date" class="form-control" id="dueDate" placeholder="마감일">
-            <label for="dueDate">마감일</label>
-        </div>
+                <!-- 마감일시 (읽기 전용) -->
+                <div class="form-floating mb-3">
+                    <input type="datetime-local"
+                           id="dueDateTime"
+                           class="form-control"
+                           placeholder="마감일시"
+                           readonly disabled>
+                    <label for="dueDateTime">구인 마감일시</label>
+                </div>
 
-        <div class="form-floating mb-3">
-            <textarea class="form-control" id="description" placeholder="내용" style="height: 100px;"></textarea>
-            <label for="description">내용</label>
-        </div>
+                <!-- 설명 -->
+                <div class="form-floating mb-3">
+                    <textarea id="description" class="form-control" placeholder="내용" style="height:100px;"></textarea>
+                    <label for="description">내용</label>
+                </div>
 
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="technologies" placeholder="사용 기술">
-            <label for="technologies">사용 기술 (콤마로 구분)</label>
-        </div>
+                <!-- 기술 스택 -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">사용 기술 (선택)</label>
+                    <input type="text" id="techInput" class="form-control mb-2" placeholder="기술 입력 후 Enter">
+                    <div id="techOptions" class="d-flex flex-wrap">
+                        <span class="tech-option">Java</span>
+                        <span class="tech-option">Spring Boot</span>
+                        <!-- … -->
+                    </div>
+                </div>
 
-        <div class="form-floating mb-3">
-            <input type="number" class="form-control" id="recruitPeriod" placeholder="구인 기간">
-            <label for="recruitPeriod">구인 기간 (일)</label>
-        </div>
+                <!-- 시작가 -->
+                <div class="form-floating mb-3">
+                    <input type="number" id="startPrice" class="form-control" placeholder="초기 경매 금액">
+                    <label for="startPrice">초기 경매 금액 (₩)</label>
+                </div>
 
-        <div class="form-floating mb-3">
-            <input type="number" class="form-control" id="startPrice" placeholder="시작가">
-            <label for="startPrice">초기 경매 금액 (₩)</label>
-        </div>
+                <!-- 상태 -->
+                <div class="form-floating mb-4">
+                    <select id="status" class="form-select">
+                        <option value="구인중">구인중</option>
+                        <option value="마감">마감</option>
+                    </select>
+                    <label for="status">구인 상태</label>
+                </div>
 
-        <div class="form-floating mb-4">
-            <select class="form-select" id="status">
-                <option value="구인중">구인중</option>
-                <option value="마감">마감</option>
-            </select>
-            <label for="status">구인 상태</label>
-        </div>
-
-        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-            <button class="btn btn-gold px-4" id="saveBtn">수정 저장</button>
-            <button class="btn btn-outline-secondary px-4" id="closeBtn">조기 마감</button>
-            <button class="btn btn-outline-dark px-4" onclick="history.back()">목록</button>
+                <!-- 버튼 그룹 -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <button id="saveBtn" class="btn btn-gold px-4">수정 저장</button>
+                    <button id="closeBtn" class="btn btn-outline-secondary px-4">조기 마감</button>
+                    <!-- 3. 목록 버튼 직접 라우팅 -->
+                    <button class="btn btn-outline-dark px-4"
+                            onclick="location.href='/dashboard/admin_dashboard'">
+                        목록
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    const segments = window.location.pathname.split('/');
-    const id = segments[segments.length - 1];
-
+    // 기존 스크립트 그대로…
+    const id = window.location.pathname.split('/').pop();
     $('#projId').val(id);
+
+    $('#techOptions').on('click', '.tech-option', function(){
+        $(this).toggleClass('selected');
+    });
+    $('#techInput').on('keydown', function(e){
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const val = $(this).val().trim();
+            if (!val) return;
+            let $exist = $('#techOptions .tech-option').filter((_,el)=>$(el).text()===val);
+            if ($exist.length) $exist.toggleClass('selected');
+            else $('<span class="tech-option selected"></span>').text(val).appendTo('#techOptions');
+            $(this).val('');
+        }
+    });
 
     function loadDetail() {
         $.getJSON(`/api/board/${id}`, res => {
             const p = res.data;
             $('#title').val(p.title);
-            $('#dueDate').val(p.dueDate);
+            $('#dueDateTime').val(p.dueDate.substring(0,16));
             $('#description').val(p.description);
-            $('#technologies').val(p.technologies.join(','));
-            $('#recruitPeriod').val(p.recruitPeriod);
             $('#startPrice').val(p.startPrice);
             $('#status').val(p.status);
+            p.technologies?.forEach(t=>{
+                $('#techOptions .tech-option').filter((_,el)=>$(el).text()===t)
+                    .addClass('selected');
+            });
         });
     }
-
-    $('#saveBtn').click(() => {
+    $('#saveBtn').click(()=>{
+        const techs = $('#techOptions .tech-option.selected')
+            .map((_,el)=>$(el).text()).get();
         const dto = {
-            title: $('#title').val(),
-            dueDate: $('#dueDate').val(),
-            description: $('#description').val(),
-            technologies: $('#technologies').val().split(','),
-            recruitPeriod: parseInt($('#recruitPeriod').val(), 10),
-            startPrice: parseInt($('#startPrice').val(), 10),
-            status: $('#status').val()
+            title:        $('#title').val(),
+            description:  $('#description').val(),
+            technologies: techs,
+            dueDate:      $('#dueDateTime').val(),
+            startPrice:   parseInt($('#startPrice').val(),10),
+            status:       $('#status').val()
         };
-
         $.ajax({
             url: `/api/board/${id}`,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(dto),
-            success: () => {
-                alert('수정 완료');
-                location.href = '/board/list';
-            },
-            error: xhr => {
-                alert('수정 실패: ' + xhr.responseText);
-            }
+            success: ()=>{ alert('수정 완료'); location.href='/board/list.html'; },
+            error: xhr=> alert('수정 실패: '+xhr.responseText)
         });
     });
-
-    $('#closeBtn').click(() => {
+    $('#closeBtn').click(()=>{
         $.ajax({
             url: `/api/board/${id}/close`,
             method: 'PUT',
-            success: () => {
-                $('#status').val('마감');
-                alert('조기 마감되었습니다');
-                location.href = '/board/list';
-            },
-            error: xhr => alert('조기 마감 실패: ' + xhr.responseText)
+            success: ()=>{ alert('조기 마감되었습니다'); location.href='/board/list.html'; },
+            error: xhr=> alert('조기 마감 실패: '+xhr.responseText)
         });
     });
-
-    $(document).ready(loadDetail);
+    $(loadDetail);
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

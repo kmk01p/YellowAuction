@@ -2,8 +2,12 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <!-- 1. 반응형 뷰포트 메타 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>경매 목록</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 2. 공통 반응형 CSS -->
+    <link rel="stylesheet" href="/css/responsive.css">
     <style>
         body {
             background-color: #fdfaf1;
@@ -35,38 +39,29 @@
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #fff7dd;">
     <div class="container-fluid">
         <a class="navbar-brand fw-bold" href="/">YellowAuction</a>
-
-        <div class="collapse navbar-collapse justify-content-end">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navMenu">
             <ul class="navbar-nav">
-
-                <!-- 🔸 로그인한 경우 -->
                 <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 홈 -->
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
-                       th:href="@{/dashboard/com_dashboard.html}">🏠 홈</a>
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
-                       th:href="@{/dashboard/free_dashboard.html}">🏠 홈</a>
+                    <a class="nav-link"
+                       th:href="@{${session.loginUser.userType == 'EMPLOYER'} ? '/dashboard/com_dashboard.html' : '/dashboard/free_dashboard.html'}">
+                        🏠 홈
+                    </a>
                 </li>
-
                 <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 마이페이지 -->
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'EMPLOYER'}"
-                       th:href="@{/profile/com_list.html}">📂 마이페이지</a>
-                    <a class="nav-link" th:if="${session.loginUser.userType == 'FREELANCER'}"
-                       th:href="@{/profile/free_list.html}">📂 마이페이지</a>
+                    <a class="nav-link"
+                       th:href="@{${session.loginUser.userType == 'EMPLOYER'} ? '/profile/com_list.html' : '/profile/free_list.html'}">
+                        📂 마이페이지
+                    </a>
                 </li>
-
                 <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 경매 목록 -->
                     <a class="nav-link" th:href="@{/board/list.html}">📋 경매 목록</a>
                 </li>
-
                 <li class="nav-item" th:if="${session.loginUser != null}">
-                    <!-- 로그아웃 -->
                     <a class="nav-link" th:href="@{/logout}">🔓 로그아웃</a>
                 </li>
-
-                <!-- 🔹 비로그인 상태 -->
                 <li class="nav-item" th:if="${session.loginUser == null}">
                     <a class="nav-link" th:href="@{/login}">🔑 로그인</a>
                 </li>
@@ -79,22 +74,28 @@
 </nav>
 
 <div class="container my-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">📋 경매 목록</h2>
-        <div class="d-flex align-items-center gap-2">
-            <input type="text" id="searchKeyword" class="form-control" style="width:200px;" placeholder="제목 또는 기술 검색" />
-            <button class="btn btn-outline-primary" onclick="searchProjects()">검색</button>
-            <select id="sortOption" class="form-select" style="width:180px;">
-                <option value="">정렬 기준</option>
-                <option value="status">구인중 우선</option>
-                <option value="recent">시간순</option>
-                <option value="priceAsc">경매시작가 낮은 순</option>
-            </select>
-            <button class="btn btn-outline-secondary" onclick="sortProjects()">정렬</button>
-            <button class="btn btn-gold" onclick="location.href='/board/create.html'">+ 새 프로젝트 등록</button>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <!-- 검색/정렬/등록 컨트롤 -->
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+                <h2 class="fw-bold mb-0">📋 경매 목록</h2>
+                <div class="d-flex flex-wrap gap-2">
+                    <input type="text" id="searchKeyword" class="form-control" style="width:200px;" placeholder="제목 또는 기술 검색" />
+                    <button class="btn btn-outline-primary" onclick="searchProjects()">검색</button>
+                    <select id="sortOption" class="form-select" style="width:180px;">
+                        <option value="">정렬 기준</option>
+                        <option value="status">구인중 우선</option>
+                        <option value="recent">시간순</option>
+                        <option value="priceAsc">경매시작가 낮은 순</option>
+                    </select>
+                    <button class="btn btn-outline-secondary" onclick="sortProjects()">정렬</button>
+                    <button class="btn btn-gold" onclick="location.href='/board/create.html'">+ 새 프로젝트 등록</button>
+                </div>
+            </div>
+            <!-- 카드 리스트 -->
+            <div class="row" id="projectList"></div>
         </div>
     </div>
-    <div class="row" id="projectList"></div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -103,9 +104,9 @@
     let currentUserId = null;
 
     function loadUserType(callback) {
-        $.getJSON('/api/auth/me', function(res) {
+        $.getJSON('/api/auth/me', res => {
             userType = res.userType;
-            currentUserId = res.id; // ✅ 이 부분 수정됨!
+            currentUserId = res.id;
             callback();
         }).fail(() => {
             alert("로그인이 필요합니다.");
@@ -113,83 +114,74 @@
         });
     }
 
-
     function isExpired(createdAt, period) {
         if (!createdAt || !period) return false;
         const created = new Date(createdAt);
-        const deadline = new Date(created.getTime() + period * 86400000);
-        return new Date() > deadline;
+        return Date.now() > created.getTime() + period*86400000;
     }
 
     function renderProjects(projects) {
         const container = $('#projectList').empty();
-
         projects.forEach(p => {
-            // technologies null 대비
-            const techs = Array.isArray(p.technologies)
-                ? p.technologies.join(', ')
-                : '—';
-
-            // 가격·날짜 null 대비
-            const priceText = p.startPrice != null
-                ? '₩' + p.startPrice.toLocaleString()
-                : '—';
-            const dueText = p.dueDate || '—';
-
-            const expired = isExpired(p.createdAt, p.recruitPeriod);
-            const isMyPost = String(currentUserId) === String(p.userId);
+            const techs    = Array.isArray(p.technologies) ? p.technologies.join(', ') : '—';
+            const price    = p.startPrice != null ? '₩' + p.startPrice.toLocaleString() : '—';
+            let   dueText  = '—';
+            if (p.dueDate) {
+                const dt = new Date(p.dueDate);
+                dueText = dt.getFullYear() + '-' +
+                    String(dt.getMonth()+1).padStart(2,'0') + '-' +
+                    String(dt.getDate()).padStart(2,'0') + ' ' +
+                    String(dt.getHours()).padStart(2,'0') + ':' +
+                    String(dt.getMinutes()).padStart(2,'0');
+            }
             const badge = p.status === "구인중"
                 ? '<span class="badge bg-warning text-dark badge-status">구인중</span>'
                 : '<span class="badge bg-secondary badge-status">마감</span>';
-
-            let buttonHTML;
+            const expired  = isExpired(p.createdAt, p.recruitPeriod);
+            const isMyPost = String(currentUserId) === String(p.userId);
+            let   btn;
             if (userType === 'FREELANCER') {
-                buttonHTML = `<button class="btn btn-gold" ${expired ? 'disabled' : ''}`
-                    + ` onclick="location.href='/board/free_detail/${p.id}'">입찰</button>`;
+                btn = `<button class="btn btn-gold" ${expired?'disabled':''}
+                        onclick="location.href='/board/free_detail/${p.id}'">
+                        입찰</button>`;
             } else if (isMyPost) {
-                buttonHTML = `<button class="btn btn-outline-dark" ${expired ? 'disabled' : ''}`
-                    + ` onclick="location.href='/board/com_detail/${p.id}'">수정</button>`;
+                btn = `<button class="btn btn-outline-dark" ${expired?'disabled':''}
+                        onclick="location.href='/board/com_detail/${p.id}'">
+                        수정</button>`;
             } else {
-                buttonHTML = `<button class="btn btn-outline-dark" disabled>수정불가</button>`;
+                btn = `<button class="btn btn-outline-dark" disabled>수정불가</button>`;
             }
 
-            const card = $(`
+            container.append(`
                 <div class="col-md-6 col-lg-4 mb-4">
                   <div class="card project-card h-100 p-3">
                     <h5 class="card-title">${p.title}</h5>
                     <p><strong>기술:</strong> ${techs}</p>
-                    <p><strong>경매 시작가:</strong> ${priceText}</p>
-                    <p><strong>마감일:</strong> ${dueText}</p>
+                    <p><strong>경매 시작가:</strong> ${price}</p>
+                    <p><strong>마감일시:</strong> ${dueText}</p>
                     ${badge}
                     <div class="mt-3 d-grid gap-2">
-                      ${buttonHTML}
+                      ${btn}
                     </div>
                   </div>
                 </div>
             `);
-            container.append(card);
         });
     }
 
     function loadList() {
         $.getJSON('/api/board', res => renderProjects(res.data));
     }
-
     function searchProjects() {
-        const keyword = $('#searchKeyword').val().trim();
-        if (!keyword) {
-            loadList();
-        } else {
-            $.getJSON('/api/board/search', { keyword }, res => renderProjects(res.data));
-        }
+        const kw = $('#searchKeyword').val().trim();
+        if (!kw) return loadList();
+        $.getJSON('/api/board/search', { keyword: kw }, res => renderProjects(res.data));
     }
-
     function sortProjects() {
         const s = $('#sortOption').val();
         if (!s) return loadList();
         $.getJSON('/api/board/sort', { sort: s }, res => renderProjects(res.data));
     }
-
 
     $(document).ready(() => {
         loadUserType(loadList);
