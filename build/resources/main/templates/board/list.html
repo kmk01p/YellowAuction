@@ -117,41 +117,39 @@
     function isExpired(createdAt, period) {
         if (!createdAt || !period) return false;
         const created = new Date(createdAt);
-        return Date.now() > created.getTime() + period * 86400000;
+        return Date.now() > created.getTime() + period*86400000;
     }
 
     function renderProjects(projects) {
         const container = $('#projectList').empty();
         projects.forEach(p => {
-            const techs   = Array.isArray(p.technologies) ? p.technologies.join(', ') : '—';
-            const price   = p.startPrice != null ? '₩' + p.startPrice.toLocaleString() : '—';
-            let dueText   = '—';
+            const techs    = Array.isArray(p.technologies) ? p.technologies.join(', ') : '—';
+            const price    = p.startPrice != null ? '₩' + p.startPrice.toLocaleString() : '—';
+            let   dueText  = '—';
             if (p.dueDate) {
                 const dt = new Date(p.dueDate);
-                dueText = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')} `
-                    + `${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+                dueText = dt.getFullYear() + '-' +
+                    String(dt.getMonth()+1).padStart(2,'0') + '-' +
+                    String(dt.getDate()).padStart(2,'0') + ' ' +
+                    String(dt.getHours()).padStart(2,'0') + ':' +
+                    String(dt.getMinutes()).padStart(2,'0');
             }
-            const badge   = p.status === "구인중"
+            const badge = p.status === "구인중"
                 ? '<span class="badge bg-warning text-dark badge-status">구인중</span>'
                 : '<span class="badge bg-secondary badge-status">마감</span>';
-            const expired     = isExpired(p.createdAt, p.recruitPeriod);
-            const isMyPost    = String(currentUserId) === String(p.userId);
-            let btnHtml;
-
+            const expired  = isExpired(p.createdAt, p.recruitPeriod);
+            const isMyPost = String(currentUserId) === String(p.userId);
+            let   btn;
             if (userType === 'FREELANCER') {
-                // freelancer는 입찰 페이지로
-                btnHtml = `<button class="btn btn-gold" ${expired?'disabled':''}
-                                 onclick="location.href='/board/free_detail.html?id=${p.id}'">
-                               입찰
-                           </button>`;
+                btn = `<button class="btn btn-gold" ${expired?'disabled':''}
+                        onclick="location.href='/board/free_detail/${p.id}'">
+                        입찰</button>`;
             } else if (isMyPost) {
-                // 본인이 올린 공고면 수정 페이지로
-                btnHtml = `<button class="btn btn-outline-dark" ${expired?'disabled':''}
-                                 onclick="location.href='/board/com_detail.html?id=${p.id}'">
-                               수정
-                           </button>`;
+                btn = `<button class="btn btn-outline-dark" ${expired?'disabled':''}
+                        onclick="location.href='/board/com_detail/${p.id}'">
+                        수정</button>`;
             } else {
-                btnHtml = `<button class="btn btn-outline-dark" disabled>수정불가</button>`;
+                btn = `<button class="btn btn-outline-dark" disabled>수정불가</button>`;
             }
 
             container.append(`
@@ -163,7 +161,7 @@
                     <p><strong>마감일시:</strong> ${dueText}</p>
                     ${badge}
                     <div class="mt-3 d-grid gap-2">
-                      ${btnHtml}
+                      ${btn}
                     </div>
                   </div>
                 </div>
