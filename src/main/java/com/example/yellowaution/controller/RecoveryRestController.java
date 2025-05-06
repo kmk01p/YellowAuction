@@ -1,9 +1,9 @@
 package com.example.yellowaution.controller;
 
-
-
 import com.example.yellowaution.dto.EmailRequest;
+import com.example.yellowaution.dto.PasswordRecoveryRequest;
 import com.example.yellowaution.dto.ResetPasswordRequest;
+import com.example.yellowaution.dto.VerifyCodeRequest;
 import com.example.yellowaution.service.AccountRecoveryService;
 import com.example.yellowaution.service.PasswordResetService;
 import jakarta.validation.Valid;
@@ -27,10 +27,6 @@ public class RecoveryRestController {
         this.passwordResetService = passwordResetService;
     }
 
-    /**
-     * 1) 아이디(Username) 찾기
-     * POST /api/recover/username
-     */
     @PostMapping("/username")
     public ResponseEntity<Map<String, String>> recoverUsername(
             @Valid @RequestBody EmailRequest request
@@ -38,28 +34,27 @@ public class RecoveryRestController {
         accountRecoveryService.sendUsernameByEmail(request.getEmail());
         return ResponseEntity.ok(Map.of("message", "이메일로 아이디를 발송했습니다."));
     }
-
-    /**
-     * 2) 비밀번호 재설정용 토큰 발송
-     * POST /api/recover/password/token
-     */
+    /** 1) 인증번호 요청 */
     @PostMapping("/password/token")
-    public ResponseEntity<Map<String, String>> sendResetToken(
-            @Valid @RequestBody EmailRequest request
-    ) {
-        passwordResetService.createAndSendResetToken(request.getEmail());
-        return ResponseEntity.ok(Map.of("message", "이메일로 비밀번호 재설정 링크를 발송했습니다."));
+    public ResponseEntity<Map<String, String>> sendCode(
+            @Valid @RequestBody PasswordRecoveryRequest req) {
+        passwordResetService.sendVerificationCode(req.getUsername(), req.getEmail());
+        return ResponseEntity.ok(Map.of("message", "인증번호를 이메일로 발송했습니다."));
     }
 
-    /**
-     * 3) 토큰으로 새 비밀번호 설정
-     * POST /api/recover/password
-     */
+    /** 2) 인증번호 검증 */
+    @PostMapping("/password/verify")
+    public ResponseEntity<Map<String,String>> verifyCode(
+            @Valid @RequestBody VerifyCodeRequest req) {
+        passwordResetService.verifyCode(req.getUsername(), req.getEmail(), req.getCode());
+        return ResponseEntity.ok(Map.of("message", "인증번호가 확인되었습니다."));
+    }
+
+    /** 3) 새 비밀번호 변경 */
     @PostMapping("/password")
-    public ResponseEntity<Map<String, String>> resetPassword(
-            @Valid @RequestBody ResetPasswordRequest request
-    ) {
-        passwordResetService.resetPassword(request.getToken(), request.getNewPassword());
+    public ResponseEntity<Map<String,String>> resetPwd(
+            @Valid @RequestBody ResetPasswordRequest req) {
+        passwordResetService.resetPassword(req.getToken(), req.getNewPassword());
         return ResponseEntity.ok(Map.of("message", "비밀번호가 성공적으로 변경되었습니다."));
     }
 
