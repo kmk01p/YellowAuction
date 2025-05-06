@@ -101,7 +101,7 @@
                 ORDER BY CASE WHEN b.status = '구인중' THEN 0 ELSE 1 END
             </when>
             <when test="sort == 'recent'">
-                ORDER BY b.created_at ASC
+                ORDER BY b.due_date ASC
             </when>
             <when test="sort == 'priceAsc'">
                 ORDER BY b.start_price ASC
