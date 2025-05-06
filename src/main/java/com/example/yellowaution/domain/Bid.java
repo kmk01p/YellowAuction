@@ -1,5 +1,6 @@
 package com.example.yellowaution.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,6 +44,7 @@ public class Bid {
      * - 여러 개의 Bid가 하나의 Board에 연결될 수 있음
      * - 기본 FetchType은 EAGER이나, 성능 최적화를 위해 LAZY로 설정하는 것을 고려할 수 있습니다.
      */
+    @JsonIgnore
     @ManyToOne
     private Board board;
 

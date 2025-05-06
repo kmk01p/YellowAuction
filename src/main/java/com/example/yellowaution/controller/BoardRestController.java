@@ -109,7 +109,17 @@ public class BoardRestController {
      * @return ApiResponse: 수정된 게시글 데이터를 담은 응답 객체
      */
     @PutMapping("/{id}")
-    public ApiResponse update(@PathVariable Long id, @RequestBody Board dto) {
+    public ApiResponse update(
+            @PathVariable Long id,
+            @RequestBody Board dto,
+            HttpSession session   // 세션 파라미터 추가
+    ) {
+        // 1) 세션에서 로그인 사용자 가져오기
+        User loginUser = (User) session.getAttribute("loginUser");
+        // 2) dto에 집어넣기
+        dto.setUser(loginUser);
+
+        // 3) 업데이트
         Board updated = service.update(id, dto);
         return new ApiResponse(updated);
     }

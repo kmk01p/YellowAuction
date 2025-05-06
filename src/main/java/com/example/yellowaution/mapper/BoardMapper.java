@@ -1,115 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+package com.example.yellowaution.mapper;
 
-<mapper namespace="com.example.yellowaution.mapper.BoardMapper">
+import com.example.yellowaution.domain.Board;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
-    <!-- 1) Technologies 조회 -->
-    <select id="selectTechnologies"
-            parameterType="long"
-            resultType="string">
-        SELECT technology
-        FROM board_technologies
-        WHERE board_id = #{id}
-    </select>
+import java.util.List;
 
-    <!-- 2) Board 전체 필드 매핑 -->
-    <resultMap id="boardResultMap"
-               type="com.example.yellowaution.domain.Board">
-        <id     property="id"          column="id"/>
-        <result property="title"       column="title"/>
+@Mapper
+public interface BoardMapper {
 
-        <!-- dueDate는 LocalDateTime으로 매핑 -->
-        <result property="dueDate"
-                column="due_date"
-                javaType="java.time.LocalDateTime"
-                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+    /**
+     * 제목 또는 기술 키워드로 검색
+     * SQL: mapper/BoardMapper.xml 의 <select id="searchByKeyword"> 매핑
+     */
+    List<Board> searchByKeyword(@Param("keyword") String keyword);
 
-        <result property="description" column="description"/>
-        <result property="recruitPeriod" column="recruit_period"/>
-        <result property="startPrice"  column="start_price"/>
-        <result property="currentPrice" column="current_price"/>
-        <result property="status"      column="status"/>
-
-        <!-- createdAt도 LocalDateTime으로 매핑 -->
-        <result property="createdAt"
-                column="created_at"
-                javaType="java.time.LocalDateTime"
-                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
-
-        <!-- User 연관 매핑 (ID만 가져옴) -->
-        <association property="user"
-                     javaType="com.example.yellowaution.domain.User">
-            <id property="id" column="user_id"/>
-        </association>
-
-        <!-- Technologies 리스트 매핑 -->
-        <collection property="technologies"
-                    ofType="java.lang.String"
-                    column="id"
-                    select="selectTechnologies"/>
-    </resultMap>
-
-    <!-- 3) 검색용 쿼리 -->
-    <select id="searchByKeyword"
-            parameterType="string"
-            resultMap="boardResultMap">
-        SELECT DISTINCT
-        b.id,
-        b.title,
-        b.due_date,
-        b.description,
-        b.recruit_period,
-        b.start_price,
-        b.current_price,
-        b.status,
-        b.created_at,
-        b.user_id
-        FROM board b
-        LEFT JOIN board_technologies bt
-        ON b.id = bt.board_id
-        WHERE 1=1
-        <if test="keyword != null and keyword != ''">
-            AND (
-            b.title LIKE CONCAT('%', #{keyword}, '%')
-            OR bt.technology LIKE CONCAT('%', #{keyword}, '%')
-            )
-        </if>
-        GROUP BY b.id
-        ORDER BY b.id DESC
-    </select>
-
-    <!-- 4) 정렬용 쿼리 -->
-    <select id="sortByCriteria"
-            parameterType="string"
-            resultMap="boardResultMap">
-        SELECT
-        b.id,
-        b.title,
-        b.due_date,
-        b.description,
-        b.recruit_period,
-        b.start_price,
-        b.current_price,
-        b.status,
-        b.created_at,
-        b.user_id
-        FROM board b
-        <choose>
-            <when test="sort == 'status'">
-                ORDER BY CASE WHEN b.status = '구인중' THEN 0 ELSE 1 END
-            </when>
-            <when test="sort == 'recent'">
-                ORDER BY b.created_at ASC
-            </when>
-            <when test="sort == 'priceAsc'">
-                ORDER BY b.start_price ASC
-            </when>
-            <otherwise>
-                ORDER BY b.id DESC
-            </otherwise>
-        </choose>
-    </select>
-
-</mapper>
+    /**
+     * 정렬 기준에 따라 정렬
+     * SQL: mapper/BoardMapper.xml 의 <select id="sortByCriteria"> 매핑
+     */
+    List<Board> sortByCriteria(@Param("sort") String sort);
+}
