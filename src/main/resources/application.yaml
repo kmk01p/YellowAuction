@@ -10,7 +10,12 @@ logging:
 spring:
   #
   datasource:
-    
+    # 호스트와 포트는 이미 주신 대로 db.forhim.kr:3306
+    url: jdbc:mysql://db.forhim.kr:3306/dbwilliam7872ksh?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: william7872ksh        # MySQL 접속 ID
+    password: bnn3570jhk7872!        # 실제 비밀번호
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
   mail:
     host: smtps.hiworks.com       # Hiworks SMTP (SSL) 서버
     port: 465                     # SSL 전용 포트
