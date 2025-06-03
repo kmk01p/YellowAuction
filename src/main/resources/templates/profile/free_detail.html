@@ -34,25 +34,56 @@
             color: white;
             border-color: #f59e0b;
         }
+
+        /* Fixed form-floating styles */
         .form-floating {
             position: relative;
+            margin-bottom: 1.5rem;
         }
-        .form-floating > .form-control:focus ~ label,
-        .form-floating > .form-control:not(:placeholder-shown) ~ label {
-            opacity: 0.65;
-            transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+
+        .form-floating > .form-control {
+            padding: 1.75rem 1rem 0.75rem 1rem !important;
+            height: auto;
+            min-height: 58px;
+            border: 2px solid #d1d5db;
+            border-radius: 0.75rem;
+            background: white;
+            font-size: 1rem;
+            line-height: 1.4;
+            transition: all 0.3s ease;
         }
+
+        .form-floating > .form-control:focus {
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+            outline: none;
+        }
+
         .form-floating > label {
             position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            padding: 1rem 0.75rem;
+            top: 0.5rem;
+            left: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #6b7280;
+            background: white;
+            padding: 0 0.25rem;
             pointer-events: none;
-            border: 1px solid transparent;
-            transform-origin: 0 0;
-            transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
+            transition: all 0.15s ease-in-out;
+            z-index: 2;
         }
+
+        .form-floating > .form-control::placeholder {
+            color: transparent;
+        }
+
+        .form-floating > .form-control:focus ~ label,
+        .form-floating > .form-control:not(:placeholder-shown) ~ label {
+            color: #f59e0b;
+            font-size: 0.75rem;
+            top: 0.5rem;
+        }
+
         .loader {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #fbbf24;
@@ -156,26 +187,26 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Name -->
                     <div class="form-floating">
-                        <input type="text" id="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300" placeholder="이름">
-                        <label for="name" class="text-gray-600">이름</label>
+                        <input type="text" id="name" class="form-control" placeholder="이름">
+                        <label for="name">이름</label>
                     </div>
 
                     <!-- Job Type -->
                     <div class="form-floating">
-                        <input type="text" id="jobType" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300" placeholder="희망 직무">
-                        <label for="jobType" class="text-gray-600">희망 직무</label>
+                        <input type="text" id="jobType" class="form-control" placeholder="희망 직무">
+                        <label for="jobType">희망 직무</label>
                     </div>
 
                     <!-- Career -->
                     <div class="form-floating">
-                        <input type="number" id="career" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300" placeholder="경력(년)">
-                        <label for="career" class="text-gray-600">경력(년)</label>
+                        <input type="number" id="career" class="form-control" placeholder="경력(년)">
+                        <label for="career">경력(년)</label>
                     </div>
 
                     <!-- Portfolio URL -->
                     <div class="form-floating">
-                        <input type="url" id="homepageUrl" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300" placeholder="포트폴리오 URL">
-                        <label for="homepageUrl" class="text-gray-600">포트폴리오 URL</label>
+                        <input type="url" id="homepageUrl" class="form-control" placeholder="포트폴리오 URL">
+                        <label for="homepageUrl">포트폴리오 URL</label>
                     </div>
                 </div>
             </div>
@@ -189,14 +220,14 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Phone -->
                     <div class="form-floating">
-                        <input type="tel" id="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300" placeholder="전화번호">
-                        <label for="phone" class="text-gray-600">전화번호</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="전화번호">
+                        <label for="phone">전화번호</label>
                     </div>
 
                     <!-- Email -->
                     <div class="form-floating">
-                        <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300" placeholder="이메일">
-                        <label for="email" class="text-gray-600">이메일</label>
+                        <input type="email" id="email" class="form-control" placeholder="이메일">
+                        <label for="email">이메일</label>
                     </div>
                 </div>
             </div>

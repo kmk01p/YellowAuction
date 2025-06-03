@@ -2,105 +2,312 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
   <meta charset="UTF-8">
-  <!-- 반응형 뷰포트 메타 -->
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>프로젝트 입찰 상세</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- 공통 반응형 CSS -->
-  <link rel="stylesheet" href="/css/responsive.css">
+  <title>YellowAuction - 프로젝트 입찰 상세</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body {
-      background-color: #fdfaf1;
-      font-family: 'Pretendard', sans-serif;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #fdfaf1 0%, #fff9e6 100%);
+      min-height: 100vh;
     }
-    .section-box {
-      background-color: #ffffff;
-      border-radius: 16px;
-      padding: 30px;
-      margin-bottom: 40px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    .gradient-bg {
+      background: linear-gradient(135deg, #fff7dd 0%, #fffaed 100%);
     }
-    h2 {
-      margin-bottom: 20px;
-      font-weight: bold;
+    .card-hover {
+      transition: all 0.3s ease;
     }
-    table {
-      font-size: 0.9rem;
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     }
-    /* 강조용 밝은 옐로우 백그라운드 */
-    .highlight-row {
-      background-color: #fff9c4 !important;
+    .winner-card {
+      background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%);
+      border: 2px solid #f59e0b;
+    }
+    .bid-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+    }
+    .stats-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold" href="/">YellowAuction</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end" id="navMenu">
-      <ul class="navbar-nav">
-        <li class="nav-item" th:if="${session.loginUser != null}">
-          <a class="nav-link"
-             th:href="@{${session.loginUser.userType=='EMPLOYER'}?'/dashboard/com_dashboard.html':'/dashboard/free_dashboard.html'}">
-            🏠 홈
+<!-- Navigation -->
+<nav class="gradient-bg shadow-lg">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <div class="flex items-center">
+        <a href="/" class="text-2xl font-bold text-gray-800 flex items-center">
+          <i class="fas fa-gavel text-yellow-600 mr-2"></i>
+          YellowAuction
+        </a>
+      </div>
+      <div class="hidden md:block">
+        <div class="ml-10 flex items-baseline space-x-4">
+          <a th:href="@{${session.loginUser.userType=='EMPLOYER'}?'/dashboard/com_dashboard.html':'/dashboard/free_dashboard.html'}"
+             th:if="${session.loginUser != null}"
+             class="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">
+            <i class="fas fa-home mr-1"></i>홈
           </a>
-        </li>
-        <li class="nav-item" th:if="${session.loginUser != null}">
-          <a class="nav-link" th:href="@{/board/list.html}">📋 경매 목록</a>
-        </li>
-        <li class="nav-item" th:if="${session.loginUser != null}">
-          <a class="nav-link" th:href="@{/logout}">🔓 로그아웃</a>
-        </li>
-        <li class="nav-item" th:if="${session.loginUser == null}">
-          <a class="nav-link" th:href="@{/login}">🔑 로그인</a>
-        </li>
-        <li class="nav-item" th:if="${session.loginUser == null}">
-          <a class="nav-link" th:href="@{/register}">📝 회원가입</a>
-        </li>
-      </ul>
+          <a href="/dashboard/admin_dashboard" class="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 bg-yellow-200">
+            <i class="fas fa-chart-line mr-1"></i>관리자 대시보드
+          </a>
+          <a href="/board/list.html" th:if="${session.loginUser != null}"
+             class="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">
+            <i class="fas fa-list mr-1"></i>경매 목록
+          </a>
+          <a href="/logout" th:if="${session.loginUser != null}"
+             class="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">
+            <i class="fas fa-sign-out-alt mr-1"></i>로그아웃
+          </a>
+          <a href="/login" th:if="${session.loginUser == null}"
+             class="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">
+            <i class="fas fa-sign-in-alt mr-1"></i>로그인
+          </a>
+        </div>
+      </div>
+      <div class="md:hidden">
+        <button type="button" class="text-gray-800 hover:text-gray-600 focus:outline-none focus:text-gray-600">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
     </div>
   </div>
 </nav>
 
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-12 col-md-10 col-lg-8">
-      <div class="section-box">
-        <h2>📈 “[<span th:text="${board.title}"></span>]” 입찰 현황</h2>
-        <div class="table-responsive">
-          <table class="table table-striped table-bordered">
-            <thead class="table-light">
-            <tr>
-              <th>입찰 ID</th>
-              <th>프리랜서</th>
-              <th>금액</th>
-              <th>입찰 시간</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="bid, stat : ${bids}"
-                th:classappend="${board.status=='마감' and stat.index==0} ? 'highlight-row fw-bold'">
-              <td th:text="${bid.id}"></td>
-              <td th:text="${bid.bidderUsername}"></td>
-              <td th:text="${bid.amount} + '원'"></td>
-              <td th:text="${bid.createdAt}"></td>
-            </tr>
-            </tbody>
-          </table>
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Header Section -->
+  <div class="mb-8 animate-fade-in">
+    <div class="bg-white rounded-2xl shadow-xl p-8">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center">
+          <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white mr-4">
+            <i class="fas fa-gavel text-2xl"></i>
+          </div>
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900">입찰 현황 관리</h1>
+            <p class="text-gray-600 mt-1">프로젝트별 입찰 현황을 모니터링하고 관리하세요</p>
+          </div>
         </div>
-        <div class="d-flex justify-content-end">
-          <button class="btn btn-secondary" onclick="location.href='/dashboard/admin_dashboard'">
-            ← 뒤로가기
-          </button>
+        <button onclick="location.href='/dashboard/admin_dashboard'"
+                class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center">
+          <i class="fas fa-arrow-left mr-2"></i>
+          관리자 대시보드
+        </button>
+      </div>
+
+      <!-- Project Info -->
+      <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-6 border-l-4 border-yellow-400">
+        <h2 class="text-xl font-semibold text-gray-900 mb-2">
+          <i class="fas fa-project-diagram text-yellow-600 mr-2"></i>
+          "<span th:text="${board.title}">프로젝트 제목</span>"
+        </h2>
+        <div class="flex items-center space-x-4 text-sm text-gray-600">
+                    <span class="flex items-center">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        프로젝트 상태: <span th:text="${board.status}" class="ml-1 font-medium">진행중</span>
+                    </span>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bid Statistics -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 animate-fade-in">
+    <div class="stats-card p-6 rounded-xl shadow-lg">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+          <i class="fas fa-users text-xl"></i>
+        </div>
+        <div class="ml-4">
+          <p class="text-sm font-medium text-gray-600">총 입찰자</p>
+          <p class="text-2xl font-bold text-gray-900" id="totalBidders">0</p>
+        </div>
+      </div>
+    </div>
+    <div class="stats-card p-6 rounded-xl shadow-lg">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-green-100 text-green-600">
+          <i class="fas fa-trophy text-xl"></i>
+        </div>
+        <div class="ml-4">
+          <p class="text-sm font-medium text-gray-600">최고 입찰가</p>
+          <p class="text-2xl font-bold text-gray-900" id="highestBid">0원</p>
+        </div>
+      </div>
+    </div>
+    <div class="stats-card p-6 rounded-xl shadow-lg">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+          <i class="fas fa-calculator text-xl"></i>
+        </div>
+        <div class="ml-4">
+          <p class="text-sm font-medium text-gray-600">평균 입찰가</p>
+          <p class="text-2xl font-bold text-gray-900" id="avgBid">0원</p>
+        </div>
+      </div>
+    </div>
+    <div class="stats-card p-6 rounded-xl shadow-lg">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+          <i class="fas fa-chart-line text-xl"></i>
+        </div>
+        <div class="ml-4">
+          <p class="text-sm font-medium text-gray-600">경쟁률</p>
+          <p class="text-2xl font-bold text-gray-900" id="competition">0:1</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bid List -->
+  <div class="bg-white rounded-2xl shadow-xl overflow-hidden animate-fade-in">
+    <div class="px-8 py-6 border-b border-gray-200">
+      <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+        <i class="fas fa-list-ol text-blue-500 mr-2"></i>
+        입찰 현황 목록
+      </h3>
+    </div>
+
+    <!-- Bid Cards Container -->
+    <div class="p-8">
+      <!-- Empty State (관리자용 - 첫 입찰 유도 메시지 제거) -->
+      <div th:if="${#lists.isEmpty(bids)}" class="text-center py-12">
+        <div class="text-6xl text-gray-300 mb-4">
+          <i class="fas fa-inbox"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-600 mb-2">입찰 내역이 없습니다</h3>
+        <p class="text-gray-500">아직 이 프로젝트에 입찰한 프리랜서가 없습니다.</p>
+      </div>
+
+      <!-- Bid Cards -->
+      <div th:unless="${#lists.isEmpty(bids)}" class="space-y-4">
+        <div th:each="bid, stat : ${bids}"
+             th:class="${board.status=='마감' and stat.index==0} ? 'winner-card' : 'bid-card'"
+             class="rounded-xl p-6 card-hover">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+              <!-- Rank Icon -->
+              <div class="flex items-center justify-center w-12 h-12 rounded-full">
+                <i th:if="${stat.index == 0}" class="fas fa-crown text-yellow-500 text-2xl"></i>
+                <i th:if="${stat.index == 1}" class="fas fa-medal text-gray-400 text-2xl"></i>
+                <i th:if="${stat.index == 2}" class="fas fa-award text-amber-600 text-2xl"></i>
+                <span th:if="${stat.index > 2}"
+                      class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-sm font-semibold text-gray-600"
+                      th:text="${stat.index + 1}">4</span>
+              </div>
+
+              <!-- Bidder Info -->
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h4 class="text-lg font-semibold text-gray-900" th:text="${bid.bidderUsername}">프리랜서명</h4>
+                  <span th:if="${board.status=='마감' and stat.index==0}"
+                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <i class="fas fa-check-circle mr-1"></i>낙찰자
+                                    </span>
+                  <span th:if="${stat.index == 0 and board.status!='마감'}"
+                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        <i class="fas fa-trophy mr-1"></i>최고가
+                                    </span>
+                </div>
+                <div class="flex items-center space-x-4 text-sm text-gray-600 mt-1">
+                                    <span class="flex items-center">
+                                        <i class="fas fa-hashtag mr-1"></i>
+                                        입찰 ID: <span th:text="${bid.id}" class="ml-1">1</span>
+                                    </span>
+                  <span class="flex items-center">
+                                        <i class="fas fa-clock mr-1"></i>
+                                        <span th:text="${bid.createdAt}">2024-01-15 14:30:00</span>
+                                    </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bid Amount -->
+            <div class="text-right">
+              <div class="text-2xl font-bold"
+                   th:class="${board.status=='마감' and stat.index==0} ? 'text-yellow-600' : 'text-gray-900'">
+                <span th:text="${#numbers.formatInteger(bid.amount, 0, 'COMMA')}">1,000,000</span>원
+              </div>
+              <div class="text-sm text-gray-500 mt-1">
+                순위: <span th:text="${stat.index + 1}">1</span>위
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="px-8 py-6 bg-gray-50 border-t border-gray-200">
+      <div class="flex items-center justify-between">
+        <div class="text-sm text-gray-600">
+          <i class="fas fa-info-circle mr-1"></i>
+          입찰은 금액 순으로 정렬되어 표시됩니다
+        </div>
+        <button onclick="location.href='/dashboard/admin_dashboard'"
+                class="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center">
+          <i class="fas fa-tachometer-alt mr-2"></i>
+          관리자 대시보드로 이동
+        </button>
       </div>
     </div>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Footer -->
+<footer class="bg-gray-800 text-white py-8 mt-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <p>&copy; 2024 YellowAuction. 모든 권리 보유.</p>
+      <p class="mt-2 text-gray-400">경매형 프리랜서 플랫폼</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Calculate and display statistics
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get all bid amounts from the page
+    const bidAmounts = [];
+    document.querySelectorAll('[th\\:text*="bid.amount"]').forEach(element => {
+      const text = element.textContent;
+      const amount = parseInt(text.replace(/[^\d]/g, ''));
+      if (!isNaN(amount)) {
+        bidAmounts.push(amount);
+      }
+    });
+
+    // Update statistics
+    const totalBidders = bidAmounts.length;
+    const highestBid = totalBidders > 0 ? Math.max(...bidAmounts) : 0;
+    const avgBid = totalBidders > 0 ? Math.round(bidAmounts.reduce((a, b) => a + b, 0) / totalBidders) : 0;
+
+    document.getElementById('totalBidders').textContent = totalBidders.toLocaleString();
+    document.getElementById('highestBid').textContent = highestBid.toLocaleString() + '원';
+    document.getElementById('avgBid').textContent = avgBid.toLocaleString() + '원';
+    document.getElementById('competition').textContent = totalBidders + ':1';
+  });
+
+  // Auto refresh every 30 seconds
+  setInterval(function() {
+    if (document.visibilityState === 'visible') {
+      location.reload();
+    }
+  }, 30000);
+</script>
 </body>
 </html>
