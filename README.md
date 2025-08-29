@@ -10,7 +10,13 @@
 ---
 
 ## 🔗 공식 웹사이트 바로가기
-[forhim.kr](#) <!-- 실제 링크로 교체하세요 -->
+[forhim.kr](#)
+2025.07 서비스 종료 
+
+플랫폼 접속자 일간 평균 접속자 수 : 30명
+
+<img width="765" height="439" alt="image" src="https://github.com/user-attachments/assets/a748594c-babe-40fc-97f6-1c7e8e33f245" />
+
 
 ---
 ## 사용자 화면
